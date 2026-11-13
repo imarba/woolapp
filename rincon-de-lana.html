@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Mi Rincón de Lana</title>
+<style>
+:root{
+  --bg:#faf6f0; --surface:#ffffff; --text:#3d2e24; --primary:#c0623f; --accent:#7d9a7a;
+  --radius:14px; --font:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --muted:color-mix(in srgb,var(--text) 58%,var(--bg));
+  --border:color-mix(in srgb,var(--text) 13%,var(--bg));
+  --soft:color-mix(in srgb,var(--primary) 11%,var(--surface));
+  --soft2:color-mix(in srgb,var(--accent) 16%,var(--surface));
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:15px;line-height:1.5}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--primary)}
+.app{display:flex;min-height:100vh}
+.sidebar{width:232px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);padding:22px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:4px}
+.brand{display:flex;align-items:center;gap:10px;padding:0 8px 18px;font-weight:700;font-size:18px}
+.brand .logo{font-size:26px}
+.nav button{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;padding:10px 12px;border-radius:calc(var(--radius) - 4px);cursor:pointer;text-align:left;color:var(--muted);font-weight:500}
+.nav button:hover{background:var(--soft)}
+.nav button.active{background:var(--primary);color:#fff}
+.nav .ico{width:22px;text-align:center}
+.side-foot{margin-top:auto;font-size:12px;color:var(--muted);padding:8px}
+main{flex:1;padding:28px clamp(16px,3vw,40px) 90px;max-width:1280px;min-width:0}
+h1{font-size:26px;margin:0 0 4px}
+h2{font-size:19px;margin:0 0 12px}
+h3{font-size:16px;margin:0 0 8px}
+.sub{color:var(--muted);margin:0 0 22px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.between{justify-content:space-between}
+.grid{display:grid;gap:16px}
+.g4{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.g3{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
+.card.click{cursor:pointer;transition:transform .12s,box-shadow .12s}
+.card.click:hover{transform:translateY(-2px);box-shadow:0 6px 18px color-mix(in srgb,var(--text) 10%,transparent)}
+.stat .n{font-size:30px;font-weight:700;color:var(--primary)}
+.stat .l{color:var(--muted);font-size:13px}
+.btn{border:1px solid var(--border);background:var(--surface);padding:8px 14px;border-radius:calc(var(--radius) - 4px);cursor:pointer;font-weight:500;display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--text)}
+.btn:hover{border-color:var(--primary)}
+.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ghost{border-color:transparent;background:none}
+.btn.danger{color:#b3261e}
+.btn.sm{padding:4px 10px;font-size:13px}
+.btn.big{font-size:22px;width:52px;height:52px;justify-content:center;padding:0}
+input[type=text],input[type=url],input[type=number],input[type=date],input[type=search],select,textarea{width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:calc(var(--radius) - 6px);background:var(--bg)}
+textarea{min-height:90px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:2px solid color-mix(in srgb,var(--primary) 45%,transparent);border-color:var(--primary)}
+label{display:block;font-size:13px;font-weight:600;margin:0 0 4px;color:var(--muted)}
+.field{margin-bottom:12px}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:0 14px}
+.tag{display:inline-block;padding:2px 9px;border-radius:99px;background:var(--soft);color:var(--primary);font-size:12px;font-weight:600;margin:2px 4px 2px 0}
+.tag.alt{background:var(--soft2);color:color-mix(in srgb,var(--accent) 70%,var(--text))}
+.tag.grey{background:color-mix(in srgb,var(--text) 7%,var(--surface));color:var(--muted)}
+.bar{height:8px;border-radius:99px;background:color-mix(in srgb,var(--text) 8%,var(--surface));overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.thumb{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:calc(var(--radius) - 6px);background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:42px;margin-bottom:10px;overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.empty{text-align:center;color:var(--muted);padding:40px 10px;border:2px dashed var(--border);border-radius:var(--radius)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.toolbar input[type=search]{max-width:280px}
+.toolbar select{width:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.tablewrap{overflow-x:auto}
+.check{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border)}
+.check:last-child{border-bottom:0}
+.check input{width:18px;height:18px;accent-color:var(--accent)}
+.check.done span{text-decoration:line-through;color:var(--muted)}
+.check .x{margin-left:auto;opacity:.4;border:0;background:none;cursor:pointer}
+.check .x:hover{opacity:1}
+.counter{display:flex;align-items:center;gap:14px}
+.counter .num{font-size:40px;font-weight:700;min-width:70px;text-align:center;color:var(--primary)}
+.video{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:var(--radius);overflow:hidden}
+.video iframe,.video video{position:absolute;inset:0;width:100%;height:100%;border:0}
+.step{display:flex;gap:10px;align-items:center;padding:8px 10px;border-radius:calc(var(--radius) - 6px);cursor:pointer}
+.step:hover{background:var(--soft)}
+.step.cur{background:var(--soft);outline:1px solid var(--primary)}
+.step .t{font-family:ui-monospace,Menlo,monospace;font-size:13px;background:var(--primary);color:#fff;padding:2px 7px;border-radius:6px}
+.step.done .txt{text-decoration:line-through;color:var(--muted)}
+.patterntext{white-space:pre-wrap;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;background:var(--bg);padding:16px;border-radius:calc(var(--radius) - 6px);border:1px solid var(--border);max-height:520px;overflow:auto}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tabs button{border:1px solid var(--border);background:var(--surface);padding:7px 14px;border-radius:99px;cursor:pointer}
+.tabs button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.note{background:var(--soft2);border-left:4px solid var(--accent);padding:10px 14px;border-radius:8px;font-size:14px;margin:10px 0}
+.warn{background:var(--soft);border-left:4px solid var(--primary);padding:10px 14px;border-radius:8px;font-size:14px;margin:10px 0}
+.modal{position:fixed;inset:0;background:color-mix(in srgb,#000 45%,transparent);display:flex;align-items:flex-start;justify-content:center;padding:4vh 14px;z-index:50;overflow:auto}
+.modal.hidden{display:none}
+.modal-card{background:var(--surface);border-radius:var(--radius);padding:24px;width:100%;max-width:760px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 18px;border-radius:99px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:60}
+#toast.show{opacity:1}
+.swatch{display:flex;gap:4px}
+.swatch i{width:18px;height:18px;border-radius:50%;border:1px solid var(--border)}
+.preset{cursor:pointer}
+.preset.active{outline:2px solid var(--primary)}
+.color-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.color-row input[type=color]{width:44px;height:32px;border:1px solid var(--border);border-radius:8px;padding:0;background:none;cursor:pointer}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:14px}
+.kv b{color:var(--muted);font-weight:600}
+.hero-img{width:100%;max-height:260px;object-fit:cover;border-radius:var(--radius);margin-bottom:14px}
+@media (max-width:820px){
+  .app{flex-direction:column}
+  .sidebar{position:fixed;bottom:0;top:auto;left:0;right:0;width:auto;height:auto;flex-direction:row;padding:6px;z-index:40;border-right:0;border-top:1px solid var(--border);overflow-x:auto}
+  .brand,.side-foot{display:none}
+  .nav{display:flex;gap:2px;width:100%}
+  .nav button{flex-direction:column;gap:2px;font-size:11px;padding:6px 8px;justify-content:center;align-items:center;flex:1}
+  main{padding-bottom:110px}
+}
+@media print{.sidebar,.toolbar,.btn{display:none!important}main{padding:0}}
+.topbar{display:flex;justify-content:flex-end;margin:-8px 0 8px}
+.topbar select{width:auto;padding:6px 10px;border-radius:99px;background:var(--surface);cursor:pointer}
+th .nt{text-transform:none;font-weight:400}
+</style>
+
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><span class="logo" id="brand-logo">🧶</span><span id="brand-name"></span></div>
+    <nav class="nav" id="nav"></nav>
+    <div class="side-foot" id="side-foot"></div>
+  </aside>
+  <main><div class="topbar"><select id="langsel" onchange="setLang(this.value)"></select></div><div id="view"></div></main>
+</div>
+<div id="modal" class="modal hidden" onclick="if(event.target===this)closeModal()"><div class="modal-card" id="modal-body"></div></div>
+<div id="toast"></div>
+<script>
+/* =====================================================================
+   TRADUCCIONES · TRANSLATIONS · OVERSÆTTELSER
+   ===================================================================== */
+const LANGS = {es:'🇪🇸 Español', en:'🇬🇧 English', da:'🇩🇰 Dansk'};
+const I18N = {
+/* ------------------------------ ESPAÑOL ------------------------------ */
+es:{
+  dec:`,`, appNameDef:`Mi Rincón de Lana`, language:`Idioma`,
+  nav:{dash:`Panel`,projects:`Proyectos`,patterns:`Patrones`,tutorials:`Tutoriales`,guide:`Guía`,settings:`Ajustes`},
+  sideFoot:`Tus datos se guardan en este navegador.<br>Haz copias en Ajustes.`,
+  crochet:`Crochet`, knit:`Punto`, crochetLong:`Crochet (ganchillo)`, knitLong:`Punto (dos agujas)`,
+  hook:`Ganchillo`, needles:`Agujas`, cat:`Cat.`, category:`Categoría`, yes:`Sí`, no:`No`,
+  greetM:`¡Buenos días!`, greetA:`¡Buenas tardes!`, greetE:`¡Buenas noches!`, dashSub:`Esto es lo que tienes entre manos.`,
+  stInProg:`Proyectos en curso`, stDone:`Proyectos terminados`, stPat:`Patrones guardados`, stTut:`Tutoriales`,
+  keepGoing:`Continuar tejiendo`, addProject:`＋ Proyecto`, noInProg:`No tienes proyectos en curso.`, startOne:`Empezar uno`, row:`Vuelta`,
+  tipDay:`💡 Consejo del día`, lastTut:`🎬 Últimos tutoriales`, seeAll:`Ver todos`, noTutYet:`Aún no hay tutoriales. Pega un enlace de YouTube en la sección Tutoriales.`,
+  recentPat:`📒 Patrones recientes`, noPatYet:`Aún no hay patrones.`,
+  projTitle:`Proyectos`, projSub:`Cada proyecto con su lana, aguja y materiales.`, newProject:`＋ Nuevo proyecto`, search:`Buscar…`,
+  allStates:`Todos los estados`, bothCrafts:`Crochet y punto`, noMatchProj:`Ningún proyecto coincide con el filtro.`, noProj:`Todavía no hay proyectos. ¡Crea el primero!`,
+  editProjT:`Editar proyecto`, newProjT:`Nuevo proyecto`, name:`Nombre`, namePh:`Ej.: Pulpo amigurumi para Lucía`, technique:`Técnica`,
+  projType:`Tipo de proyecto`, status:`Estado`, weightRec:`Grosor de lana (categoría CYC) — ★ recomendado`, fiber:`Fibra / tipo de lana`,
+  linkedPat:`Patrón vinculado`, linkedTut:`Tutorial vinculado`, none:`— Ninguno —`, startDate:`Fecha de inicio`, endDate:`Fecha de fin`,
+  forWhom:`Para quién / talla`, notes:`Notas`, photoOpt:`Foto (opcional)`, regen:`Volver a generar la lista de materiales sugeridos (se conservan los que añadiste tú)`,
+  cancel:`Cancelar`, save:`Guardar`,
+  suggTitle:`Sugerencia:`, sugg:`para {tipo} en {tec} con lana de categoría {cat} ({catName}), el rango oficial es <b>{range}</b> → propuesta: <b>{size}</b>. Necesitarás aprox. <b>{m1}–{m2} m</b> de lana (estimación; manda siempre el patrón).`,
+  offWeight:`⚠️ Este grosor no es el habitual para este tipo de proyecto.`, projSaved:`Proyecto guardado`,
+  backProj:`← Proyectos`, copyNotion:`📋 Copiar para Notion`, edit:`✏️ Editar`,
+  progress:`Progreso`, rowCounter:`Contador de vueltas`, reset:`Reiniciar`, resetConfirm:`¿Poner el contador a 0?`,
+  techSheet:`🧾 Ficha técnica`, yarn:`Lana`, typGauge:`Tensión típica`, gaugeC:`{g} en 10 cm (punto bajo)`, gaugeK:`{g} en 10 cm (punto jersey)`,
+  estYarn:`Lana estimada`, youHave:`tienes {n} m registrados`, start:`Inicio`, offRange:`rango oficial`,
+  cycNote:`Medidas orientativas del Craft Yarn Council. Si tu patrón indica otra tensión o aguja, sigue el patrón y haz una muestra.`,
+  linked:`Vinculado`, materials:`🧰 Materiales`, prepared:`{a}/{b} preparados`, remove:`Quitar`, addMatPh:`Añadir material (botones, ojos 9 mm…)`, add:`Añadir`,
+  myYarns:`🧶 Mis lanas`, addYarn:`＋ Lana`, thYarn:`Lana`, thColorLot:`Color / lote`, thSkeins:`Ovillos`, thMPer:`m/ovillo`, lot:`Lote`, total:`Total`,
+  belowEst:`⚠️ por debajo de la estimación`, enough:`✅ suficiente según la estimación`, withinEst:`· dentro del rango estimado`,
+  yarnHint:`Apunta aquí la lana que compres: marca, color y <b>lote de tinte</b> (viene en la etiqueta).`,
+  howMany:`¿Cuántos ovillos? Con {m} m y ovillos de 100 m → <b>{a}</b>; de 200 m → <b>{b}</b>.`,
+  markDone:`¿Marcar el proyecto como terminado?`,
+  editYarnT:`Editar lana`, addYarnT:`Añadir lana`, brand:`Marca y nombre`, brandPh:`Ej.: Katia Merino Aran`, comp:`Composición`, compPh:`100 % merino superwash`,
+  color:`Color`, dyeLot:`Lote de tinte`, nSkeins:`Nº de ovillos`, mPerSkein:`Metros por ovillo`, gPerSkein:`Gramos por ovillo`,
+  delConfirm:`¿Seguro que quieres borrarlo? No se puede deshacer.`, deleted:`Borrado`,
+  patTitle:`Patrones`, patSub:`Tu biblioteca: texto, enlaces, fotos y PDF.`, newPattern:`＋ Nuevo patrón`, searchPat:`Buscar por título, autor o etiqueta…`,
+  anyLevel:`Cualquier nivel`, noMatchPat:`Ningún patrón coincide.`, noPat:`Guarda aquí tus patrones: copia el texto, pega el enlace o adjunta el PDF.`,
+  editPatT:`Editar patrón`, newPatT:`Nuevo patrón`, title:`Título`, levelCyc:`Nivel (escala CYC)`, yarnWeight:`Grosor de lana`,
+  author:`Autor/a o diseñador/a`, linkLbl:`Enlace (Ravelry, blog, tienda…)`, terminology:`Terminología del patrón`,
+  term:{es:`Español`,da:`Danés`,us:`Inglés EE. UU.`,uk:`Inglés Reino Unido`},
+  tagsLbl:`Etiquetas (separadas por comas)`, tagsPh:`regalo, verano, bebé`, patText:`Texto del patrón`, patTextPh:`V1: 6 pb en am (6)&#10;V2: aum x6 (12)&#10;…`,
+  photo:`Foto`, fileLbl:`Archivo (PDF, máx. 15 MB)`, current:`Actual`, favorite:`⭐ Favorito`, fileBig:`El archivo supera 15 MB`, patSaved:`Patrón guardado`,
+  backPat:`← Patrones`, startProj:`🧶 Empezar proyecto`, pattern:`Patrón`,
+  ukWarn:`Este patrón usa <b>términos británicos</b>: «dc» = punto bajo, «tr» = punto alto. Consulta la Guía → Abreviaturas.`,
+  usNote:`Patrón en <b>términos de EE. UU.</b>: «sc» = punto bajo, «dc» = punto alto.`,
+  noText:`Sin texto. Puedes pegarlo editando el patrón.`, openLink:`🔗 Abrir enlace`, openFile:`📎 Abrir`, print:`🖨️ Imprimir`,
+  level:`Nivel`, typTool:`Aguja/ganchillo típico`, projWith:`Proyectos con este patrón`, noneYet:`Ninguno todavía.`, file:`archivo`,
+  tutTitle:`Tutoriales`, tutSub:`Pega un enlace y conviértelo en un tutorial paso a paso.`, newTut:`＋ Nuevo tutorial`, steps:`pasos`,
+  noMatchTut:`Ningún tutorial coincide.`, noTut:`Pega un enlace de YouTube o Vimeo. Si el vídeo tiene capítulos en la descripción, cópialos y se convertirán en pasos.`,
+  editTutT:`Editar tutorial`, newTutT:`Nuevo tutorial`, videoLink:`Enlace del vídeo (YouTube, Vimeo o archivo .mp4)`, autofill:`✨ Autocompletar`,
+  channel:`Canal / autor/a`, tutTagsPh:`anillo mágico, básico`,
+  stepsLbl:`Pasos — pega los capítulos (una línea por paso con su minuto)`, moreSteps:`Añadir más pasos — pega los capítulos (una línea por paso con su minuto)`,
+  capsPh:`0:00 Materiales&#10;1:25 Anillo mágico&#10;4:10 Vuelta 2: aumentos&#10;8:42 Cerrar y rematar`,
+  capsHint:`En YouTube suelen estar en la descripción del vídeo. También puedes añadir pasos después, mientras ves el vídeo.`,
+  notEmb:`Este enlace no se puede reproducir dentro de la app, pero se guardará para abrirlo aparte.`, fetching:`Buscando título…`,
+  found:`✅ Datos encontrados.`, notFound:`No se pudo obtener el título: escríbelo a mano.`, noService:`Sin conexión con el servicio de títulos: escríbelo a mano.`,
+  stepsAdded:`{n} pasos añadidos`, tutSaved:`Tutorial guardado`, defStep:`Paso`,
+  backTut:`← Tutoriales`, openOrig:`↗ Abrir original`, videoHint:`Si el vídeo no se carga al abrir la app como archivo local, usa los botones ↗ de cada paso: abren el vídeo en el minuto exacto.`,
+  usedIn:`Usado en`, stepsT:`Pasos`, openAt:`Abrir en este minuto`, noSteps:`Sin pasos aún. Añade el primero abajo.`, stepPh:`Descripción del paso`,
+  now:`⏱ Ahora`, uncheckAll:`Desmarcar todos`, cantEmb:`Este enlace no se puede reproducir dentro de la app (por ejemplo, Instagram, TikTok o una búsqueda).`, openVideo:`Abrir vídeo ↗`,
+  guideTitle:`Guía de referencia`, guideSub:`Tablas oficiales para elegir lana, agujas y ganchillos.`,
+  tabs:{grosor:`Grosores de lana`,ganchillos:`Ganchillos`,agujas:`Agujas de punto`,abrevc:`Abreviaturas crochet`,abrevp:`Abreviaturas punto`,niveles:`Niveles`,empezar:`Para empezar`},
+  gwTitle:`Sistema estándar de grosores de lana`, gwSub:`Cada ovillo puede llevar un símbolo de madeja con un número del 0 al 7. Cuanto más alto, más gruesa la lana.`,
+  thCat:`Cat.`, thName:`Nombre`, thTypes:`Tipos de lana (etiqueta)`, thPly:`Equiv. UK/AU`, thKnitG:`Tensión punto<br><span class="nt">(10 cm, p. jersey)</span>`,
+  thNeedles:`Agujas punto`, thCrochG:`Tensión crochet<br><span class="nt">(10 cm, p. bajo)</span>`, thHook:`Ganchillo`, orMore:`o más`, orFewer:`o menos`, stsU:`p`, dcU:`pa`,
+  hookSteel:`Acero 1,4–1,6 mm · normal 2,25 mm`,
+  gwNote:`Son <b>orientaciones</b>: los grosores, tensiones y agujas más habituales de cada categoría. <b>Sigue siempre la tensión que indique tu patrón.</b><br>* La lana de encaje se suele tejer con agujas y ganchillos más grandes para lograr un tejido calado, así que su tensión varía mucho: sigue la del patrón. En crochet, su tensión se da en puntos altos.`,
+  gwPly:`La columna «Equiv. UK/AU» (ply) es la equivalencia habitual en Reino Unido y Australia; no forma parte del estándar CYC.`,
+  hooksTitle:`Tamaños de ganchillo`, hooksSub:`Fíate de los milímetros: las letras y números de EE. UU. pueden variar entre fabricantes.`,
+  steelTitle:`Ganchillos de acero (hilo fino)`, steelSub:`Van al revés: número más alto = gancho más pequeño.`, thMm:`Milímetros`, thUs:`EE. UU.`,
+  needlesTitle:`Tamaños de agujas de punto`, needlesSub:`En España se usan los milímetros. La numeración de EE. UU. aparece en muchos patrones en inglés.`,
+  abbrCTitle:`Abreviaturas de crochet`, abbrWarn:`¡Cuidado! Los nombres de EE. UU. y Reino Unido no coinciden: el <b>«double crochet» británico</b> es el <b>punto bajo</b>, y el «double crochet» de EE. UU. es el <b>punto alto</b>.`,
+  thLocal:`Español`, thAbbr:`Abrev.`, thUS:`Inglés EE. UU.`, thUK:`Inglés Reino Unido`, thEn:`Inglés`,
+  abbrNote:`Las abreviaturas en español varían algo entre autoras y países; mira siempre la leyenda de tu patrón.`, abbrKTitle:`Abreviaturas de punto`,
+  levelsTitle:`Niveles de dificultad`, levelsSub:`Escala de 4 niveles del Craft Yarn Council, la que usan muchos patrones y fabricantes.`,
+  startTitle:`Kit básico para empezar`,
+  startCards:[
+   `<h3>🪝 Crochet</h3><ul><li>Lana categoría 4 (media), lisa y de color claro.</li><li>Ganchillo de 5–6 mm (si es ergonómico, mejor para las manos).</li><li>Tijeras y aguja lanera de punta roma.</li><li>Marcadores de puntos.</li></ul><p><b>Puntos para aprender, en orden:</b> nudo corredizo → cadeneta → punto bajo → medio punto alto → punto alto → anillo mágico → aumentos y disminuciones.</p><p>Primeros proyectos: posavasos, bufanda en punto bajo, amigurumi sencillo (una bola).</p>`,
+   `<h3>🧣 Punto</h3><ul><li>Lana categoría 4 (media), lisa y de color claro.</li><li>Agujas rectas de 4,5–5,5 mm (las de bambú o madera retienen mejor los puntos).</li><li>Tijeras, aguja lanera y cinta métrica.</li></ul><p><b>Técnicas para aprender, en orden:</b> montar puntos → punto del derecho (punto bobo) → punto del revés → punto jersey → elástico 1×1 → cerrar puntos.</p><p>Primeros proyectos: muestra, paño de cocina, bufanda en punto bobo, gorro con circular.</p>`,
+   `<h3>📐 La muestra de tensión</h3><p>Teje un cuadrado de unos 15 × 15 cm con la lana y la aguja del patrón, lávalo como lavarás la prenda, déjalo secar y cuenta los puntos y vueltas en los 10 cm centrales.</p><p>Más puntos que el patrón → usa una aguja más gruesa. Menos puntos → una más fina.</p>`,
+   `<h3>🏷️ Leer la etiqueta</h3><p>Fíjate en: símbolo de grosor (0–7), composición, metros y gramos, aguja recomendada, tensión, cuidados de lavado y <b>lote de tinte</b>. Guarda una etiqueta de cada proyecto.</p>`],
+  guideSrc:`Fuente de grosores, tensiones, tamaños de agujas y ganchillos y niveles de dificultad: Craft Yarn Council's {link}. Las sugerencias de fibra y las estimaciones de metros de la app son orientativas.`,
+  setTitle:`Ajustes`, setSub:`Personaliza la app y gestiona tus datos.`, appearance:`🎨 Apariencia`, presets:`Temas predefinidos`, customColors:`Colores personalizados`,
+  colors:{bg:`Fondo`,surface:`Tarjetas`,text:`Texto`,primary:`Color principal`,accent:`Color de acento`},
+  font:`Tipografía`, corners:`Esquinas redondeadas`, appName:`Nombre de la app`, icon:`Icono (emoji)`,
+  presetNames:{calido:`Cálido artesanal`,pastel:`Pastel suave`,minimal:`Minimalista`,bosque:`Bosque`,noche:`Modo noche`},
+  fontNames:{sistema:`Sistema`,redonda:`Redondeada`,serif:`Clásica (serif)`,mano:`Manuscrita`,mono:`Máquina de escribir`},
+  expNotion:`📤 Exportar a Notion`, expIntro:`Descarga tus datos en el formato que Notion sabe importar:`,
+  csvProj:`Proyectos (CSV)`, csvPat:`Patrones (CSV)`, csvTut:`Tutoriales (CSV)`, mdAll:`Todo en una página (Markdown)`,
+  notionHow:`<b>Cómo importarlo:</b> en Notion, menú lateral → <b>Importar</b> → elige «CSV» (cada archivo se convierte en una base de datos) o «Text & Markdown» (se convierte en una página). En cada proyecto tienes también el botón «Copiar para Notion» para pegarlo directamente en una página.`,
+  notionNoFiles:`Las fotos y PDF no se incluyen en la exportación a Notion; sí en la copia de seguridad.`,
+  backupT:`💾 Copia de seguridad`, backupTxt:`Todo se guarda en este navegador ({mb} MB usados). Si borras los datos del navegador o cambias de ordenador, se pierde: haz copias a menudo.`,
+  dlBackup:`Descargar copia (JSON)`, restore:`Restaurar copia`, loadDemo:`Cargar ejemplos`, wipe:`Borrar todos los datos`,
+  downloaded:`{f} descargado`, copiedNotion:`Copiado: pégalo en una página de Notion`, dlMd:`Descargado como .md`, mdDl:`Markdown descargado`,
+  backupDl:`Copia descargada`, restoreConfirm:`Esto sustituirá todos los datos actuales por los de la copia. ¿Continuar?`, restored:`Copia restaurada`,
+  badBackup:`Ese archivo no es una copia válida`, wipe1:`¿Borrar TODOS los proyectos, patrones y tutoriales?`, wipe2:`Última confirmación: no se puede deshacer.`,
+  wiped:`Datos borrados`, demoAdded:`Ejemplos añadidos`, noSpace:`⚠️ No hay espacio suficiente para guardar`, saveErr:`⚠️ Error al guardar`,
+  files:{projects:`Proyectos`,patterns:`Patrones`,tutorials:`Tutoriales`},
+  csvP:[`Nombre`,`Técnica`,`Tipo`,`Estado`,`Progreso (%)`,`Vueltas`,`Categoría lana`,`Fibra`,`Aguja/ganchillo (mm)`,`Metros estimados`,`Lanas`,`Materiales`,`Patrón`,`Tutorial`,`Para`,`Inicio`,`Fin`,`Notas`],
+  csvPa:[`Título`,`Técnica`,`Nivel`,`Categoría lana`,`Autor`,`Enlace`,`Terminología`,`Etiquetas`,`Favorito`,`Patrón`],
+  csvT:[`Título`,`Enlace`,`Canal`,`Técnica`,`Nivel`,`Etiquetas`,`Pasos`,`Completado (%)`,`Notas`],
+  mdExported:`Exportado el`, mdType:`Tipo`, mdLink:`Enlace`, mdWatch:`Ver vídeo`, mdFor:`Para`, mdDates:`Fechas`, mdYarns:`Lanas`, mdSkeins:`{n} ovillos de {m} m`, mdLot:`lote`,
+  mat:{yarn:`Lana categoría {cat} ({name} · {types}) — unos {m1}–{m2} m`, hook:`Ganchillo de {s}`, needles:`Agujas de {s}`, scissors:`Tijeras`, tapestry:`Aguja lanera de punta roma (para rematar hebras)`, tape:`Cinta métrica`, markers:`Marcadores de puntos`},
+  demo:{patTitle:`Bolita amigurumi (ejemplo)`, patTags:`básico, amigurumi`, author:`Ejemplo`,
+    patText:`Abreviaturas: am = anillo mágico, pb = punto bajo, aum = aumento, dism = disminución\n\nV1: 6 pb en am (6)\nV2: aum x6 (12)\nV3: (1 pb, aum) x6 (18)\nV4–V7: 18 pb (18)\nV8: (1 pb, dism) x6 (12)\n→ Rellenar\nV9: dism x6 (6)\nCerrar y rematar.`,
+    tutTitle:`Anillo mágico (ejemplo: edítalo y pega el enlace de tu vídeo)`, tutQuery:`anillo magico crochet`, tutTags:`básico`, tutNotes:`Ejemplo de tutorial. Edítalo y pega el enlace de un vídeo que te guste.`,
+    steps:[`Preparar la hebra`,`Hacer el anillo`,`Primeros puntos bajos`,`Cerrar el anillo`], projName:`Mi primera bolita`, projNotes:`Proyecto de ejemplo.`},
+  cycNames:[`Encaje`,`Superfina`,`Fina`,`Ligera`,`Media`,`Gruesa`,`Muy gruesa`,`Jumbo`],
+  levels:{1:`Principiante`,2:`Fácil`,3:`Intermedio`,4:`Experimentado`},
+  levelDesc:{1:`Proyectos para quien empieza: puntos básicos y muy poca forma.`,2:`Puntos básicos, patrones repetitivos, cambios de color sencillos y forma y acabado sencillos.`,3:`Variedad de puntos y técnicas (encaje, trenzas o colores sencillos, trabajo en circular), formas y acabados de dificultad media.`,4:`Técnicas avanzadas: patrones complejos, colores en varias hebras o intarsia, formas detalladas y acabados finos.`},
+  estados:{idea:`💡 Idea`,curso:`🧶 En curso`,pausa:`⏸️ En pausa`,hecho:`✅ Terminado`},
+  tipos:{
+    amigurumi:{l:`Amigurumi / muñeco`,fibra:`Algodón o acrílico: marcan bien el punto y no se deforman con el relleno.`,extra:[`Relleno de fibra (guata siliconada)`,`Ojos de seguridad (bordados si es para menores de 3 años)`,`Marcador de inicio de vuelta`,`Alfileres para posicionar piezas`],nota:`Para amigurumi se suele usar un ganchillo algo más pequeño que el de la etiqueta, para que el tejido quede cerrado y no se vea el relleno.`},
+    gorro:{l:`Gorro`,fibra:`Lana merino, alpaca o mezcla de lana con acrílico: abrigan y son elásticas.`,extra:[`Marcadores de puntos`,`Pompón (opcional)`],nota:`El elástico del borde se teje a menudo con una aguja 0,5–1 mm más fina que el cuerpo.`},
+    bufanda:{l:`Bufanda / cuello`,fibra:`Merino, alpaca o mezclas suaves: van en contacto con el cuello.`,extra:[]},
+    manta_bebe:{l:`Manta de bebé`,fibra:`Algodón, acrílico suave o merino superwash: lavables a máquina.`,extra:[`Marcadores de puntos`],nota:`Para bebés evita lanas con pelo largo (mohair) y botones u objetos pequeños que se puedan soltar.`},
+    manta:{l:`Manta grande`,fibra:`Acrílico o mezcla lavable: más económica y fácil de cuidar.`,extra:[`Marcadores de puntos`,`Agujas circulares de cable largo (si es a punto)`]},
+    jersey:{l:`Jersey / chaqueta (adulto)`,fibra:`Lana merino o mezcla lana-algodón.`,extra:[`Agujas circulares`,`Marcadores de puntos`,`Hilo de desecho o imperdibles para reservar puntos`,`Botones (si es chaqueta)`],nota:`En prendas con talla, la muestra de tensión es imprescindible: unos pocos puntos de diferencia cambian la talla final.`},
+    calcetines:{l:`Calcetines`,fibra:`Lana de calcetín: lana superwash con un 20–25 % de poliamida (nylon) para que resista el roce.`,extra:[`Agujas de doble punta o circular pequeña`,`Marcadores de puntos`]},
+    chal:{l:`Chal`,fibra:`Merino, alpaca, seda o mezclas: lucen el calado tras el bloqueo.`,extra:[`Alfileres y alfombrillas para bloquear`,`Marcadores de puntos`]},
+    bolso:{l:`Bolso / cesta`,fibra:`Algodón o trapillo: resistentes y no ceden con el peso.`,extra:[`Asas`,`Forro (opcional)`,`Cierre o botón`]},
+    posavasos:{l:`Posavasos / salvamanteles`,fibra:`100 % algodón: aguanta el calor y se lava bien.`,extra:[]},
+    ropa_bebe:{l:`Ropa de bebé`,fibra:`Algodón, merino superwash o acrílico baby: suaves y lavables.`,extra:[`Botones`,`Marcadores de puntos`],nota:`Para bebés evita lanas con pelo largo (mohair) y cose bien los botones.`},
+    otro:{l:`Otro`,fibra:`Según el patrón.`,extra:[]}},
+  tips:[
+    `Haz siempre una muestra de 10 × 10 cm y compárala con la tensión del patrón. Si te salen más puntos, usa una aguja más gruesa; si te salen menos, una más fina.`,
+    `Guarda la etiqueta de cada ovillo: indica el lote de tinte. Compra todos los ovillos de un proyecto del mismo lote para evitar diferencias de color.`,
+    `Para aprender, elige una lana lisa, de color claro y grosor medio (categoría 4): se ven mejor los puntos.`,
+    `Fíate de los milímetros de la aguja, no de las letras o números de EE. UU.: esa numeración varía entre fabricantes.`,
+    `Los ganchillos de acero (para hilo fino) van al revés: cuanto más alto el número, más pequeño el gancho.`,
+    `En patrones en inglés, mira si usan términos de EE. UU. o de Reino Unido: el «dc» británico es el punto bajo («sc» en EE. UU.).`,
+    `En amigurumi y en tejido en espiral, pon un marcador en el primer punto de cada vuelta para no perder la cuenta.`,
+    `Bloquear la pieza (humedecerla y dejarla secar con la forma final) iguala los puntos y abre los calados.`,
+    `Compra un ovillo de más: es mejor que quedarse corta y no encontrar el mismo lote.`],
+  glossC:[[`Cadeneta`,`cad`],[`Punto deslizado / raso / enano`,`pd`],[`Punto bajo`,`pb`],[`Medio punto alto`,`mpa`],[`Punto alto`,`pa`],[`Punto alto doble`,`pad`],[`Aumento (2 puntos en el mismo)`,`aum`],[`Disminución (2 puntos juntos)`,`dism`],[`Disminución invisible`,`dism inv`],[`Anillo mágico`,`am`],[`Lazada`,`laz`],[`Hebra delantera / trasera`,`hd / ht`],[`Vuelta / hilera`,`v`],[`Punto`,`p`],[`Repetir`,`rep`],[`Saltar`,`salt`]],
+  glossK:[[`Montar puntos`,`montar`],[`Cerrar / rematar puntos`,`cerrar`],[`Punto del derecho`,`d`],[`Punto del revés`,`r`],[`Punto bobo / musgo (todo derecho en plano)`,`—`],[`Punto jersey / punto media`,`—`],[`Punto elástico (1×1, 2×2)`,`elást`],[`Punto arroz`,`—`],[`Dos puntos juntos del derecho`,`2pjd`],[`Deslizar, deslizar, tejer (disminución hacia la izquierda)`,`ddt`],[`Lazada / echar hebra`,`laz`],[`Deslizar un punto`,`desl`],[`Aumento (hacer 1)`,`aum`],[`Colocar marcador`,`cm`],[`Pasar marcador`,`pm`],[`Lado derecho / revés de la labor`,`LD / LR`]],
+},
+/* ------------------------------ ENGLISH ------------------------------ */
+en:{
+  dec:`.`, appNameDef:`My Yarn Nook`, language:`Language`,
+  nav:{dash:`Dashboard`,projects:`Projects`,patterns:`Patterns`,tutorials:`Tutorials`,guide:`Guide`,settings:`Settings`},
+  sideFoot:`Your data is stored in this browser.<br>Make backups in Settings.`,
+  crochet:`Crochet`, knit:`Knitting`, crochetLong:`Crochet (hook)`, knitLong:`Knitting (needles)`,
+  hook:`Hook`, needles:`Needles`, cat:`Cat.`, category:`Category`, yes:`Yes`, no:`No`,
+  greetM:`Good morning!`, greetA:`Good afternoon!`, greetE:`Good evening!`, dashSub:`Here's what you have on the go.`,
+  stInProg:`Projects in progress`, stDone:`Finished projects`, stPat:`Saved patterns`, stTut:`Tutorials`,
+  keepGoing:`Keep making`, addProject:`＋ Project`, noInProg:`You have no projects in progress.`, startOne:`Start one`, row:`Row`,
+  tipDay:`💡 Tip of the day`, lastTut:`🎬 Latest tutorials`, seeAll:`See all`, noTutYet:`No tutorials yet. Paste a YouTube link in the Tutorials section.`,
+  recentPat:`📒 Recent patterns`, noPatYet:`No patterns yet.`,
+  projTitle:`Projects`, projSub:`Every project with its yarn, needle and supplies.`, newProject:`＋ New project`, search:`Search…`,
+  allStates:`All statuses`, bothCrafts:`Crochet & knitting`, noMatchProj:`No project matches the filter.`, noProj:`No projects yet. Create your first one!`,
+  editProjT:`Edit project`, newProjT:`New project`, name:`Name`, namePh:`E.g. Amigurumi octopus for Lucy`, technique:`Technique`,
+  projType:`Project type`, status:`Status`, weightRec:`Yarn weight (CYC category) — ★ recommended`, fiber:`Fiber / yarn type`,
+  linkedPat:`Linked pattern`, linkedTut:`Linked tutorial`, none:`— None —`, startDate:`Start date`, endDate:`End date`,
+  forWhom:`For whom / size`, notes:`Notes`, photoOpt:`Photo (optional)`, regen:`Regenerate the suggested supplies list (items you added yourself are kept)`,
+  cancel:`Cancel`, save:`Save`,
+  suggTitle:`Suggestion:`, sugg:`for {tipo} ({tec}) with category {cat} yarn ({catName}), the official range is <b>{range}</b> → suggested: <b>{size}</b>. You'll need about <b>{m1}–{m2} m</b> of yarn (estimate; your pattern always comes first).`,
+  offWeight:`⚠️ This weight isn't the usual one for this type of project.`, projSaved:`Project saved`,
+  backProj:`← Projects`, copyNotion:`📋 Copy for Notion`, edit:`✏️ Edit`,
+  progress:`Progress`, rowCounter:`Row counter`, reset:`Reset`, resetConfirm:`Reset the counter to 0?`,
+  techSheet:`🧾 Project sheet`, yarn:`Yarn`, typGauge:`Typical gauge`, gaugeC:`{g} per 10 cm (single crochet)`, gaugeK:`{g} per 10 cm (stockinette)`,
+  estYarn:`Estimated yarn`, youHave:`you've logged {n} m`, start:`Start`, offRange:`official range`,
+  cycNote:`Guideline figures from the Craft Yarn Council. If your pattern gives a different gauge or needle, follow the pattern and make a swatch.`,
+  linked:`Linked`, materials:`🧰 Supplies`, prepared:`{a}/{b} ready`, remove:`Remove`, addMatPh:`Add a supply (buttons, 9 mm eyes…)`, add:`Add`,
+  myYarns:`🧶 My yarns`, addYarn:`＋ Yarn`, thYarn:`Yarn`, thColorLot:`Colour / lot`, thSkeins:`Balls`, thMPer:`m/ball`, lot:`Lot`, total:`Total`,
+  belowEst:`⚠️ below the estimate`, enough:`✅ enough according to the estimate`, withinEst:`· within the estimated range`,
+  yarnHint:`Log the yarn you buy here: brand, colour and <b>dye lot</b> (it's on the label).`,
+  howMany:`How many balls? For {m} m with 100 m balls → <b>{a}</b>; with 200 m balls → <b>{b}</b>.`,
+  markDone:`Mark the project as finished?`,
+  editYarnT:`Edit yarn`, addYarnT:`Add yarn`, brand:`Brand and name`, brandPh:`E.g. Drops Merino Extra Fine`, comp:`Fiber content`, compPh:`100% superwash merino`,
+  color:`Colour`, dyeLot:`Dye lot`, nSkeins:`Number of balls`, mPerSkein:`Metres per ball`, gPerSkein:`Grams per ball`,
+  delConfirm:`Are you sure you want to delete this? It can't be undone.`, deleted:`Deleted`,
+  patTitle:`Patterns`, patSub:`Your library: text, links, photos and PDFs.`, newPattern:`＋ New pattern`, searchPat:`Search by title, designer or tag…`,
+  anyLevel:`Any level`, noMatchPat:`No pattern matches.`, noPat:`Keep your patterns here: copy the text, paste the link or attach the PDF.`,
+  editPatT:`Edit pattern`, newPatT:`New pattern`, title:`Title`, levelCyc:`Level (CYC scale)`, yarnWeight:`Yarn weight`,
+  author:`Designer`, linkLbl:`Link (Ravelry, blog, shop…)`, terminology:`Pattern terminology`,
+  term:{es:`Spanish`,da:`Danish`,us:`US English`,uk:`UK English`},
+  tagsLbl:`Tags (comma separated)`, tagsPh:`gift, summer, baby`, patText:`Pattern text`, patTextPh:`Rnd 1: 6 sc in MR (6)&#10;Rnd 2: inc x6 (12)&#10;…`,
+  photo:`Photo`, fileLbl:`File (PDF, max. 15 MB)`, current:`Current`, favorite:`⭐ Favourite`, fileBig:`The file is larger than 15 MB`, patSaved:`Pattern saved`,
+  backPat:`← Patterns`, startProj:`🧶 Start project`, pattern:`Pattern`,
+  ukWarn:`This pattern uses <b>UK terms</b>: UK "dc" = US single crochet (sc), UK "tr" = US double crochet (dc). See Guide → Abbreviations.`,
+  usNote:`Pattern in <b>US terms</b>: "sc" = UK double crochet (dc), "dc" = UK treble (tr).`,
+  noText:`No text. You can paste it by editing the pattern.`, openLink:`🔗 Open link`, openFile:`📎 Open`, print:`🖨️ Print`,
+  level:`Level`, typTool:`Typical needle/hook`, projWith:`Projects using this pattern`, noneYet:`None yet.`, file:`file`,
+  tutTitle:`Tutorials`, tutSub:`Paste a link and turn it into a step-by-step tutorial.`, newTut:`＋ New tutorial`, steps:`steps`,
+  noMatchTut:`No tutorial matches.`, noTut:`Paste a YouTube or Vimeo link. If the video has chapters in its description, copy them and they'll become steps.`,
+  editTutT:`Edit tutorial`, newTutT:`New tutorial`, videoLink:`Video link (YouTube, Vimeo or .mp4 file)`, autofill:`✨ Autofill`,
+  channel:`Channel / creator`, tutTagsPh:`magic ring, basics`,
+  stepsLbl:`Steps — paste the chapters (one line per step with its timestamp)`, moreSteps:`Add more steps — paste the chapters (one line per step with its timestamp)`,
+  capsPh:`0:00 Supplies&#10;1:25 Magic ring&#10;4:10 Round 2: increases&#10;8:42 Fasten off`,
+  capsHint:`On YouTube they're usually in the video description. You can also add steps later while you watch.`,
+  notEmb:`This link can't be played inside the app, but it will be saved so you can open it separately.`, fetching:`Looking up title…`,
+  found:`✅ Details found.`, notFound:`Couldn't get the title: type it in.`, noService:`Couldn't reach the title service: type it in.`,
+  stepsAdded:`{n} steps added`, tutSaved:`Tutorial saved`, defStep:`Step`,
+  backTut:`← Tutorials`, openOrig:`↗ Open original`, videoHint:`If the video doesn't load when you open the app as a local file, use the ↗ buttons on each step: they open the video at that exact minute.`,
+  usedIn:`Used in`, stepsT:`Steps`, openAt:`Open at this minute`, noSteps:`No steps yet. Add the first one below.`, stepPh:`Step description`,
+  now:`⏱ Now`, uncheckAll:`Uncheck all`, cantEmb:`This link can't be played inside the app (e.g. Instagram, TikTok or a search page).`, openVideo:`Open video ↗`,
+  guideTitle:`Reference guide`, guideSub:`Official charts for choosing yarn, needles and hooks.`,
+  tabs:{grosor:`Yarn weights`,ganchillos:`Crochet hooks`,agujas:`Knitting needles`,abrevc:`Crochet abbreviations`,abrevp:`Knitting abbreviations`,niveles:`Skill levels`,empezar:`Getting started`},
+  gwTitle:`Standard Yarn Weight System`, gwSub:`Yarn labels may show a skein symbol numbered 0 to 7. The higher the number, the thicker the yarn.`,
+  thCat:`Cat.`, thName:`Name`, thTypes:`Yarn types (label)`, thPly:`UK/AU equiv.`, thKnitG:`Knit gauge<br><span class="nt">(10 cm, stockinette)</span>`,
+  thNeedles:`Knitting needles`, thCrochG:`Crochet gauge<br><span class="nt">(10 cm, single crochet)</span>`, thHook:`Hook`, orMore:`and larger`, orFewer:`and fewer`, stsU:`sts`, dcU:`dc`,
+  hookSteel:`Steel 1.4–1.6 mm · regular 2.25 mm`,
+  gwNote:`These are <b>guidelines</b>: the most commonly used gauges and needle or hook sizes for each category. <b>Always follow the gauge stated in your pattern.</b><br>* Lace weight yarns are usually knitted or crocheted on larger needles and hooks to create lacy, openwork fabric, so the gauge range is hard to pin down: follow your pattern. Crochet gauge for category 0 is given in double crochets.`,
+  gwPly:`The "UK/AU equiv." (ply) column is the usual equivalent in the UK and Australia; it isn't part of the CYC standard.`,
+  hooksTitle:`Crochet hook sizes`, hooksSub:`Go by the millimetres: US letters and numbers can vary between manufacturers.`,
+  steelTitle:`Steel hooks (thread)`, steelSub:`Sized in reverse: a higher number means a smaller hook.`, thMm:`Millimetres`, thUs:`US`,
+  needlesTitle:`Knitting needle sizes`, needlesSub:`Metric sizes are the most reliable. US numbers appear in many English-language patterns.`,
+  abbrCTitle:`Crochet abbreviations`, abbrWarn:`Careful! US and UK names don't match: the <b>UK "double crochet"</b> is the <b>US single crochet</b>, and the US "double crochet" is the UK treble.`,
+  thLocal:`English`, thAbbr:`Abbr.`, thUS:`US terms`, thUK:`UK terms`, thEn:`English`,
+  abbrNote:`Abbreviations vary slightly between designers; always check your pattern's key.`, abbrKTitle:`Knitting abbreviations`,
+  levelsTitle:`Skill levels`, levelsSub:`The Craft Yarn Council's 4-level scale, used by many patterns and manufacturers.`,
+  startTitle:`Beginner's starter kit`,
+  startCards:[
+   `<h3>🪝 Crochet</h3><ul><li>Category 4 (medium) yarn, smooth and light-coloured.</li><li>A 5–6 mm hook (an ergonomic one is kinder to your hands).</li><li>Scissors and a blunt tapestry needle.</li><li>Stitch markers.</li></ul><p><b>Stitches to learn, in order:</b> slip knot → chain → single crochet → half double crochet → double crochet → magic ring → increases and decreases.</p><p>First projects: coasters, a single-crochet scarf, a simple amigurumi (a ball).</p>`,
+   `<h3>🧣 Knitting</h3><ul><li>Category 4 (medium) yarn, smooth and light-coloured.</li><li>4.5–5.5 mm straight needles (bamboo or wood holds stitches better).</li><li>Scissors, tapestry needle and tape measure.</li></ul><p><b>Techniques to learn, in order:</b> cast on → knit stitch (garter) → purl stitch → stockinette → 1×1 rib → bind off.</p><p>First projects: a swatch, a dishcloth, a garter-stitch scarf, a hat in the round.</p>`,
+   `<h3>📐 The gauge swatch</h3><p>Make a square of about 15 × 15 cm with the pattern's yarn and needle, wash it the way you'll wash the finished piece, let it dry and count the stitches and rows in the central 10 cm.</p><p>More stitches than the pattern → use a larger needle. Fewer stitches → a smaller one.</p>`,
+   `<h3>🏷️ Reading the label</h3><p>Look for: weight symbol (0–7), fiber content, metres and grams, recommended needle, gauge, care instructions and <b>dye lot</b>. Keep one label from each project.</p>`],
+  guideSrc:`Source for yarn weights, gauges, needle and hook sizes and skill levels: Craft Yarn Council's {link}. The app's fiber suggestions and yardage estimates are guidelines only.`,
+  setTitle:`Settings`, setSub:`Customise the app and manage your data.`, appearance:`🎨 Appearance`, presets:`Preset themes`, customColors:`Custom colours`,
+  colors:{bg:`Background`,surface:`Cards`,text:`Text`,primary:`Main colour`,accent:`Accent colour`},
+  font:`Font`, corners:`Rounded corners`, appName:`App name`, icon:`Icon (emoji)`,
+  presetNames:{calido:`Warm & handmade`,pastel:`Soft pastel`,minimal:`Minimal`,bosque:`Forest`,noche:`Night mode`},
+  fontNames:{sistema:`System`,redonda:`Rounded`,serif:`Classic (serif)`,mano:`Handwritten`,mono:`Typewriter`},
+  expNotion:`📤 Export to Notion`, expIntro:`Download your data in formats Notion can import:`,
+  csvProj:`Projects (CSV)`, csvPat:`Patterns (CSV)`, csvTut:`Tutorials (CSV)`, mdAll:`Everything on one page (Markdown)`,
+  notionHow:`<b>How to import:</b> in Notion, sidebar → <b>Import</b> → choose "CSV" (each file becomes a database) or "Text & Markdown" (becomes a page). Each project also has a "Copy for Notion" button so you can paste it straight into a page.`,
+  notionNoFiles:`Photos and PDFs aren't included in the Notion export; they are included in the backup.`,
+  backupT:`💾 Backup`, backupTxt:`Everything is stored in this browser ({mb} MB used). If you clear your browser data or switch computers, it's gone: back up often.`,
+  dlBackup:`Download backup (JSON)`, restore:`Restore backup`, loadDemo:`Load examples`, wipe:`Delete all data`,
+  downloaded:`{f} downloaded`, copiedNotion:`Copied: paste it into a Notion page`, dlMd:`Downloaded as .md`, mdDl:`Markdown downloaded`,
+  backupDl:`Backup downloaded`, restoreConfirm:`This will replace all your current data with the backup. Continue?`, restored:`Backup restored`,
+  badBackup:`That file isn't a valid backup`, wipe1:`Delete ALL projects, patterns and tutorials?`, wipe2:`Final confirmation: this can't be undone.`,
+  wiped:`Data deleted`, demoAdded:`Examples added`, noSpace:`⚠️ Not enough space to save`, saveErr:`⚠️ Error while saving`,
+  files:{projects:`Projects`,patterns:`Patterns`,tutorials:`Tutorials`},
+  csvP:[`Name`,`Technique`,`Type`,`Status`,`Progress (%)`,`Rows`,`Yarn category`,`Fiber`,`Needle/hook (mm)`,`Estimated metres`,`Yarns`,`Supplies`,`Pattern`,`Tutorial`,`For`,`Start`,`End`,`Notes`],
+  csvPa:[`Title`,`Technique`,`Level`,`Yarn category`,`Designer`,`Link`,`Terminology`,`Tags`,`Favourite`,`Pattern`],
+  csvT:[`Title`,`Link`,`Channel`,`Technique`,`Level`,`Tags`,`Steps`,`Completed (%)`,`Notes`],
+  mdExported:`Exported on`, mdType:`Type`, mdLink:`Link`, mdWatch:`Watch video`, mdFor:`For`, mdDates:`Dates`, mdYarns:`Yarns`, mdSkeins:`{n} balls of {m} m`, mdLot:`lot`,
+  mat:{yarn:`Category {cat} yarn ({name} · {types}) — about {m1}–{m2} m`, hook:`{s} crochet hook`, needles:`{s} needles`, scissors:`Scissors`, tapestry:`Blunt tapestry needle (for weaving in ends)`, tape:`Tape measure`, markers:`Stitch markers`},
+  demo:{patTitle:`Amigurumi ball (example)`, patTags:`basics, amigurumi`, author:`Example`,
+    patText:`Abbreviations (US): MR = magic ring, sc = single crochet, inc = increase, dec = decrease\n\nRnd 1: 6 sc in MR (6)\nRnd 2: inc x6 (12)\nRnd 3: (1 sc, inc) x6 (18)\nRnds 4–7: 18 sc (18)\nRnd 8: (1 sc, dec) x6 (12)\n→ Stuff\nRnd 9: dec x6 (6)\nFasten off.`,
+    tutTitle:`Magic ring (example: edit it and paste your video link)`, tutQuery:`magic ring crochet`, tutTags:`basics`, tutNotes:`Example tutorial. Edit it and paste the link of a video you like.`,
+    steps:[`Set up the yarn`,`Make the ring`,`First single crochets`,`Close the ring`], projName:`My first ball`, projNotes:`Example project.`},
+  cycNames:[`Lace`,`Super Fine`,`Fine`,`Light`,`Medium`,`Bulky`,`Super Bulky`,`Jumbo`],
+  levels:{1:`Beginner`,2:`Easy`,3:`Intermediate`,4:`Experienced`},
+  levelDesc:{1:`Projects for first-timers: basic stitches and minimal shaping.`,2:`Basic stitches, repetitive stitch patterns, simple colour changes and simple shaping and finishing.`,3:`A variety of stitches and techniques (lace, cables or simple colourwork, working in the round), mid-level shaping and finishing.`,4:`Advanced techniques: intricate stitch patterns, multi-colour stranded work or intarsia, detailed shaping and refined finishing.`},
+  estados:{idea:`💡 Idea`,curso:`🧶 In progress`,pausa:`⏸️ Paused`,hecho:`✅ Finished`},
+  tipos:{
+    amigurumi:{l:`Amigurumi / toy`,fibra:`Cotton or acrylic: stitches show clearly and they keep their shape when stuffed.`,extra:[`Fiberfill stuffing`,`Safety eyes (embroider them for children under 3)`,`Beginning-of-round marker`,`Pins for positioning parts`],nota:`For amigurumi a hook a bit smaller than the label suggests is usually used, so the fabric is tight and the stuffing doesn't show.`},
+    gorro:{l:`Hat`,fibra:`Merino, alpaca or a wool–acrylic blend: warm and stretchy.`,extra:[`Stitch markers`,`Pompom (optional)`],nota:`The brim ribbing is often worked on a needle 0.5–1 mm smaller than the body.`},
+    bufanda:{l:`Scarf / cowl`,fibra:`Merino, alpaca or soft blends: they sit against your neck.`,extra:[]},
+    manta_bebe:{l:`Baby blanket`,fibra:`Cotton, soft acrylic or superwash merino: machine washable.`,extra:[`Stitch markers`],nota:`For babies, avoid long-haired yarns (mohair) and buttons or small parts that could come loose.`},
+    manta:{l:`Large blanket`,fibra:`Acrylic or a washable blend: more affordable and easy care.`,extra:[`Stitch markers`,`Long-cable circular needles (if knitted)`]},
+    jersey:{l:`Sweater / cardigan (adult)`,fibra:`Merino or a wool–cotton blend.`,extra:[`Circular needles`,`Stitch markers`,`Waste yarn or safety pins to hold stitches`,`Buttons (for a cardigan)`],nota:`For sized garments the gauge swatch is essential: a few stitches' difference changes the finished size.`},
+    calcetines:{l:`Socks`,fibra:`Sock yarn: superwash wool with 20–25% polyamide (nylon) so it stands up to wear.`,extra:[`Double-pointed needles or a small circular`,`Stitch markers`]},
+    chal:{l:`Shawl`,fibra:`Merino, alpaca, silk or blends: lace opens up beautifully after blocking.`,extra:[`Blocking pins and mats`,`Stitch markers`]},
+    bolso:{l:`Bag / basket`,fibra:`Cotton or t-shirt yarn: strong and doesn't stretch under weight.`,extra:[`Handles`,`Lining (optional)`,`Clasp or button`]},
+    posavasos:{l:`Coasters / placemats`,fibra:`100% cotton: heat resistant and washes well.`,extra:[]},
+    ropa_bebe:{l:`Baby clothes`,fibra:`Cotton, superwash merino or baby acrylic: soft and washable.`,extra:[`Buttons`,`Stitch markers`],nota:`For babies, avoid long-haired yarns (mohair) and sew buttons on securely.`},
+    otro:{l:`Other`,fibra:`As per the pattern.`,extra:[]}},
+  tips:[
+    `Always make a 10 × 10 cm swatch and compare it with the pattern gauge. More stitches? Go up a needle size. Fewer? Go down.`,
+    `Keep the label from each ball: it shows the dye lot. Buy all the yarn for a project from the same lot to avoid colour differences.`,
+    `When learning, choose a smooth, light-coloured, medium-weight yarn (category 4): the stitches are easier to see.`,
+    `Go by the needle's millimetres, not US letters or numbers: those vary between manufacturers.`,
+    `Steel crochet hooks (for thread) are sized in reverse: the higher the number, the smaller the hook.`,
+    `In English patterns, check whether they use US or UK terms: the UK "dc" is the US "sc".`,
+    `In amigurumi and spiral rounds, put a marker in the first stitch of each round so you don't lose count.`,
+    `Blocking (dampening the piece and letting it dry in its final shape) evens out stitches and opens up lace.`,
+    `Buy one extra ball: better than running short and not finding the same dye lot.`],
+  glossC:[[`Chain`,`ch`],[`Slip stitch`,`sl st`],[`Single crochet (US) / double crochet (UK)`,`sc`],[`Half double crochet`,`hdc`],[`Double crochet (US) / treble (UK)`,`dc`],[`Treble (US) / double treble (UK)`,`tr`],[`Increase`,`inc`],[`Decrease`,`dec`],[`Invisible decrease`,`inv dec`],[`Magic ring`,`MR`],[`Yarn over`,`yo`],[`Front / back loop only`,`FLO / BLO`],[`Round / row`,`rnd`],[`Stitch`,`st`],[`Repeat`,`rep`],[`Skip`,`sk`]],
+  glossK:[[`Cast on`,`CO`],[`Bind off (UK: cast off)`,`BO`],[`Knit`,`k`],[`Purl`,`p`],[`Garter stitch`,`—`],[`Stockinette (UK: stocking stitch)`,`st st`],[`Ribbing`,`k1 p1 / k2 p2`],[`Seed stitch (UK: moss stitch)`,`—`],[`Knit two together`,`k2tog`],[`Slip, slip, knit`,`ssk`],[`Yarn over`,`yo`],[`Slip`,`sl`],[`Make one`,`M1`],[`Place marker`,`pm`],[`Slip marker`,`sm`],[`Right side / wrong side`,`RS / WS`]],
+},
+/* ------------------------------ DANSK ------------------------------ */
+da:{
+  dec:`,`, appNameDef:`Mit Garnhjørne`, language:`Sprog`,
+  nav:{dash:`Oversigt`,projects:`Projekter`,patterns:`Opskrifter`,tutorials:`Videoer`,guide:`Guide`,settings:`Indstillinger`},
+  sideFoot:`Dine data gemmes i denne browser.<br>Tag backup under Indstillinger.`,
+  crochet:`Hækling`, knit:`Strikning`, crochetLong:`Hækling (hæklenål)`, knitLong:`Strikning (pinde)`,
+  hook:`Hæklenål`, needles:`Pinde`, cat:`Kat.`, category:`Kategori`, yes:`Ja`, no:`Nej`,
+  greetM:`Godmorgen!`, greetA:`God eftermiddag!`, greetE:`Godaften!`, dashSub:`Her er det, du har på pindene.`,
+  stInProg:`Projekter i gang`, stDone:`Færdige projekter`, stPat:`Gemte opskrifter`, stTut:`Videoer`,
+  keepGoing:`Fortsæt`, addProject:`＋ Projekt`, noInProg:`Du har ingen projekter i gang.`, startOne:`Start et`, row:`Omg.`,
+  tipDay:`💡 Dagens tip`, lastTut:`🎬 Seneste videoer`, seeAll:`Se alle`, noTutYet:`Ingen videoer endnu. Indsæt et YouTube-link under Videoer.`,
+  recentPat:`📒 Seneste opskrifter`, noPatYet:`Ingen opskrifter endnu.`,
+  projTitle:`Projekter`, projSub:`Hvert projekt med garn, pinde og materialer.`, newProject:`＋ Nyt projekt`, search:`Søg…`,
+  allStates:`Alle statusser`, bothCrafts:`Hækling og strikning`, noMatchProj:`Intet projekt matcher filteret.`, noProj:`Ingen projekter endnu. Opret dit første!`,
+  editProjT:`Rediger projekt`, newProjT:`Nyt projekt`, name:`Navn`, namePh:`F.eks.: Amigurumi-blæksprutte til Ida`, technique:`Teknik`,
+  projType:`Projekttype`, status:`Status`, weightRec:`Garntykkelse (CYC-kategori) — ★ anbefalet`, fiber:`Fiber / garntype`,
+  linkedPat:`Tilknyttet opskrift`, linkedTut:`Tilknyttet video`, none:`— Ingen —`, startDate:`Startdato`, endDate:`Slutdato`,
+  forWhom:`Til hvem / størrelse`, notes:`Noter`, photoOpt:`Foto (valgfrit)`, regen:`Lav listen over foreslåede materialer igen (dem, du selv har tilføjet, bevares)`,
+  cancel:`Annuller`, save:`Gem`,
+  suggTitle:`Forslag:`, sugg:`til {tipo} i {tec} med garn i kategori {cat} ({catName}) er det officielle interval <b>{range}</b> → forslag: <b>{size}</b>. Du skal bruge ca. <b>{m1}–{m2} m</b> garn (skøn; opskriften gælder altid først).`,
+  offWeight:`⚠️ Denne tykkelse er ikke den sædvanlige til denne type projekt.`, projSaved:`Projekt gemt`,
+  backProj:`← Projekter`, copyNotion:`📋 Kopiér til Notion`, edit:`✏️ Rediger`,
+  progress:`Fremskridt`, rowCounter:`Omgangstæller`, reset:`Nulstil`, resetConfirm:`Nulstil tælleren til 0?`,
+  techSheet:`🧾 Projektark`, yarn:`Garn`, typGauge:`Typisk strikkefasthed`, gaugeC:`{g} pr. 10 cm (fastmasker)`, gaugeK:`{g} pr. 10 cm (glatstrik)`,
+  estYarn:`Anslået garnforbrug`, youHave:`du har registreret {n} m`, start:`Start`, offRange:`officielt interval`,
+  cycNote:`Vejledende tal fra Craft Yarn Council. Hvis din opskrift angiver en anden strikkefasthed eller pind, så følg opskriften og lav en prøvelap.`,
+  linked:`Tilknyttet`, materials:`🧰 Materialer`, prepared:`{a}/{b} klar`, remove:`Fjern`, addMatPh:`Tilføj materiale (knapper, 9 mm øjne…)`, add:`Tilføj`,
+  myYarns:`🧶 Mit garn`, addYarn:`＋ Garn`, thYarn:`Garn`, thColorLot:`Farve / parti`, thSkeins:`Nøgler`, thMPer:`m/nøgle`, lot:`Parti`, total:`I alt`,
+  belowEst:`⚠️ under det anslåede`, enough:`✅ nok ifølge skønnet`, withinEst:`· inden for det anslåede interval`,
+  yarnHint:`Notér det garn, du køber: mærke, farve og <b>partinummer</b> (står på banderolen).`,
+  howMany:`Hvor mange nøgler? Med {m} m og nøgler på 100 m → <b>{a}</b>; på 200 m → <b>{b}</b>.`,
+  markDone:`Markér projektet som færdigt?`,
+  editYarnT:`Rediger garn`, addYarnT:`Tilføj garn`, brand:`Mærke og navn`, brandPh:`F.eks.: Drops Merino Extra Fine`, comp:`Materiale`, compPh:`100 % superwash-merino`,
+  color:`Farve`, dyeLot:`Partinummer`, nSkeins:`Antal nøgler`, mPerSkein:`Meter pr. nøgle`, gPerSkein:`Gram pr. nøgle`,
+  delConfirm:`Er du sikker på, at du vil slette det? Det kan ikke fortrydes.`, deleted:`Slettet`,
+  patTitle:`Opskrifter`, patSub:`Dit bibliotek: tekst, links, fotos og PDF.`, newPattern:`＋ Ny opskrift`, searchPat:`Søg efter titel, designer eller tag…`,
+  anyLevel:`Alle niveauer`, noMatchPat:`Ingen opskrift matcher.`, noPat:`Gem dine opskrifter her: kopier teksten, indsæt linket eller vedhæft PDF'en.`,
+  editPatT:`Rediger opskrift`, newPatT:`Ny opskrift`, title:`Titel`, levelCyc:`Niveau (CYC-skala)`, yarnWeight:`Garntykkelse`,
+  author:`Designer`, linkLbl:`Link (Ravelry, blog, butik…)`, terminology:`Opskriftens sprog/termer`,
+  term:{es:`Spansk`,da:`Dansk`,us:`Amerikansk engelsk`,uk:`Britisk engelsk`},
+  tagsLbl:`Tags (adskilt med komma)`, tagsPh:`gave, sommer, baby`, patText:`Opskriftens tekst`, patTextPh:`Omg 1: 6 fm i magisk ring (6)&#10;Omg 2: udt x6 (12)&#10;…`,
+  photo:`Foto`, fileLbl:`Fil (PDF, maks. 15 MB)`, current:`Nuværende`, favorite:`⭐ Favorit`, fileBig:`Filen er større end 15 MB`, patSaved:`Opskrift gemt`,
+  backPat:`← Opskrifter`, startProj:`🧶 Start projekt`, pattern:`Opskrift`,
+  ukWarn:`Denne opskrift bruger <b>britiske termer</b>: «dc» = fastmaske, «tr» = stangmaske. Se Guide → Forkortelser.`,
+  usNote:`Opskrift med <b>amerikanske termer</b>: «sc» = fastmaske, «dc» = stangmaske.`,
+  noText:`Ingen tekst. Du kan indsætte den ved at redigere opskriften.`, openLink:`🔗 Åbn link`, openFile:`📎 Åbn`, print:`🖨️ Udskriv`,
+  level:`Niveau`, typTool:`Typisk pind/hæklenål`, projWith:`Projekter med denne opskrift`, noneYet:`Ingen endnu.`, file:`fil`,
+  tutTitle:`Videoer`, tutSub:`Indsæt et link og gør det til en trin-for-trin-vejledning.`, newTut:`＋ Ny video`, steps:`trin`,
+  noMatchTut:`Ingen video matcher.`, noTut:`Indsæt et link fra YouTube eller Vimeo. Hvis videoen har kapitler i beskrivelsen, så kopiér dem, så bliver de til trin.`,
+  editTutT:`Rediger video`, newTutT:`Ny video`, videoLink:`Link til video (YouTube, Vimeo eller .mp4-fil)`, autofill:`✨ Udfyld automatisk`,
+  channel:`Kanal / skaber`, tutTagsPh:`magisk ring, grundteknik`,
+  stepsLbl:`Trin — indsæt kapitlerne (én linje pr. trin med tidspunkt)`, moreSteps:`Tilføj flere trin — indsæt kapitlerne (én linje pr. trin med tidspunkt)`,
+  capsPh:`0:00 Materialer&#10;1:25 Magisk ring&#10;4:10 Omg 2: udtagninger&#10;8:42 Afslut og hæft`,
+  capsHint:`På YouTube står de som regel i videobeskrivelsen. Du kan også tilføje trin senere, mens du ser videoen.`,
+  notEmb:`Dette link kan ikke afspilles i appen, men det gemmes, så du kan åbne det separat.`, fetching:`Henter titel…`,
+  found:`✅ Oplysninger fundet.`, notFound:`Kunne ikke hente titlen: skriv den selv.`, noService:`Ingen forbindelse til titeltjenesten: skriv den selv.`,
+  stepsAdded:`{n} trin tilføjet`, tutSaved:`Video gemt`, defStep:`Trin`,
+  backTut:`← Videoer`, openOrig:`↗ Åbn original`, videoHint:`Hvis videoen ikke indlæses, når du åbner appen som lokal fil, så brug ↗-knapperne ved hvert trin: de åbner videoen på det præcise tidspunkt.`,
+  usedIn:`Brugt i`, stepsT:`Trin`, openAt:`Åbn på dette tidspunkt`, noSteps:`Ingen trin endnu. Tilføj det første nedenfor.`, stepPh:`Beskrivelse af trinnet`,
+  now:`⏱ Nu`, uncheckAll:`Fjern alle flueben`, cantEmb:`Dette link kan ikke afspilles i appen (f.eks. Instagram, TikTok eller en søgning).`, openVideo:`Åbn video ↗`,
+  guideTitle:`Opslagsguide`, guideSub:`Officielle tabeller til valg af garn, pinde og hæklenåle.`,
+  tabs:{grosor:`Garntykkelser`,ganchillos:`Hæklenåle`,agujas:`Strikkepinde`,abrevc:`Hækleforkortelser`,abrevp:`Strikkeforkortelser`,niveles:`Niveauer`,empezar:`Kom i gang`},
+  gwTitle:`Standardsystem for garntykkelser`, gwSub:`Banderolen kan have et nøglesymbol med et tal fra 0 til 7. Jo højere tal, desto tykkere garn.`,
+  thCat:`Kat.`, thName:`Navn`, thTypes:`Garntyper (banderole)`, thPly:`UK/AU-ækv.`, thKnitG:`Strikkefasthed<br><span class="nt">(10 cm, glatstrik)</span>`,
+  thNeedles:`Strikkepinde`, thCrochG:`Hæklefasthed<br><span class="nt">(10 cm, fastmasker)</span>`, thHook:`Hæklenål`, orMore:`og større`, orFewer:`eller færre`, stsU:`m`, dcU:`stm`,
+  hookSteel:`Stål 1,4–1,6 mm · almindelig 2,25 mm`,
+  gwNote:`Tallene er <b>vejledende</b>: de mest brugte strikkefastheder og pinde- eller nålestørrelser for hver kategori. <b>Følg altid strikkefastheden i din opskrift.</b><br>* Lacegarn strikkes eller hækles som regel på større pinde og nåle for at få et luftigt hulmønster, så fastheden varierer meget: følg opskriften. Hæklefastheden for kategori 0 angives i stangmasker.`,
+  gwPly:`Kolonnen «UK/AU-ækv.» (ply) er den almindelige betegnelse i Storbritannien og Australien; den er ikke en del af CYC-standarden.`,
+  hooksTitle:`Størrelser på hæklenåle`, hooksSub:`Gå efter millimeter: amerikanske bogstaver og numre kan variere mellem producenter.`,
+  steelTitle:`Stålhæklenåle (til tyndt garn)`, steelSub:`Går omvendt: højere nummer = mindre nål.`, thMm:`Millimeter`, thUs:`USA`,
+  needlesTitle:`Størrelser på strikkepinde`, needlesSub:`I Danmark bruges millimeter. Amerikanske numre står i mange engelske opskrifter.`,
+  abbrCTitle:`Hækleforkortelser`, abbrWarn:`Pas på! Amerikanske og britiske navne er ikke ens: <b>britisk «double crochet»</b> er en <b>fastmaske</b>, mens amerikansk «double crochet» er en <b>stangmaske</b>.`,
+  thLocal:`Dansk`, thAbbr:`Fork.`, thUS:`Amerikansk engelsk`, thUK:`Britisk engelsk`, thEn:`Engelsk`,
+  abbrNote:`Danske forkortelser varierer lidt mellem designere; tjek altid forklaringen i din opskrift.`, abbrKTitle:`Strikkeforkortelser`,
+  levelsTitle:`Sværhedsgrader`, levelsSub:`Craft Yarn Councils skala med 4 niveauer, som bruges af mange opskrifter og producenter.`,
+  startTitle:`Startpakke til begyndere`,
+  startCards:[
+   `<h3>🪝 Hækling</h3><ul><li>Garn i kategori 4 (medium), glat og i en lys farve.</li><li>Hæklenål 5–6 mm (en ergonomisk er skånsom for hænderne).</li><li>Saks og stoppenål med rund spids.</li><li>Maskemarkører.</li></ul><p><b>Masker at lære, i rækkefølge:</b> løkke → luftmaske → fastmaske → halvstangmaske → stangmaske → magisk ring → udtagninger og indtagninger.</p><p>Første projekter: bordskånere, halstørklæde i fastmasker, en enkel amigurumi (en kugle).</p>`,
+   `<h3>🧣 Strikning</h3><ul><li>Garn i kategori 4 (medium), glat og i en lys farve.</li><li>Lige pinde 4,5–5,5 mm (bambus eller træ holder bedre på maskerne).</li><li>Saks, stoppenål og målebånd.</li></ul><p><b>Teknikker at lære, i rækkefølge:</b> slå op → ret (retstrik) → vrang → glatstrik → rib 1×1 → luk af.</p><p>Første projekter: prøvelap, karklud, halstørklæde i retstrik, hue på rundpind.</p>`,
+   `<h3>📐 Strikkeprøven</h3><p>Lav en firkant på ca. 15 × 15 cm med opskriftens garn og pind, vask den, som du vil vaske det færdige arbejde, lad den tørre, og tæl masker og pinde i de midterste 10 cm.</p><p>Flere masker end opskriften → brug en tykkere pind. Færre masker → en tyndere.</p>`,
+   `<h3>🏷️ Læs banderolen</h3><p>Se efter: tykkelsessymbol (0–7), materiale, meter og gram, anbefalet pind, strikkefasthed, vaskeanvisning og <b>partinummer</b>. Gem en banderole fra hvert projekt.</p>`],
+  guideSrc:`Kilde til garntykkelser, strikkefasthed, pinde- og nålestørrelser og sværhedsgrader: Craft Yarn Council's {link}. Appens forslag til fibre og skøn over meterforbrug er vejledende.`,
+  setTitle:`Indstillinger`, setSub:`Tilpas appen og administrer dine data.`, appearance:`🎨 Udseende`, presets:`Færdige temaer`, customColors:`Egne farver`,
+  colors:{bg:`Baggrund`,surface:`Kort`,text:`Tekst`,primary:`Hovedfarve`,accent:`Accentfarve`},
+  font:`Skrifttype`, corners:`Afrundede hjørner`, appName:`Appens navn`, icon:`Ikon (emoji)`,
+  presetNames:{calido:`Varm og håndlavet`,pastel:`Blød pastel`,minimal:`Minimalistisk`,bosque:`Skov`,noche:`Nattilstand`},
+  fontNames:{sistema:`System`,redonda:`Afrundet`,serif:`Klassisk (serif)`,mano:`Håndskrift`,mono:`Skrivemaskine`},
+  expNotion:`📤 Eksportér til Notion`, expIntro:`Download dine data i formater, som Notion kan importere:`,
+  csvProj:`Projekter (CSV)`, csvPat:`Opskrifter (CSV)`, csvTut:`Videoer (CSV)`, mdAll:`Alt på én side (Markdown)`,
+  notionHow:`<b>Sådan importerer du:</b> i Notion, sidemenu → <b>Import</b> → vælg «CSV» (hver fil bliver en database) eller «Text & Markdown» (bliver en side). Hvert projekt har også knappen «Kopiér til Notion», så du kan indsætte det direkte på en side.`,
+  notionNoFiles:`Fotos og PDF'er kommer ikke med i Notion-eksporten; de er med i backuppen.`,
+  backupT:`💾 Backup`, backupTxt:`Alt gemmes i denne browser ({mb} MB brugt). Hvis du sletter browserdata eller skifter computer, forsvinder det: tag backup tit.`,
+  dlBackup:`Download backup (JSON)`, restore:`Gendan backup`, loadDemo:`Indlæs eksempler`, wipe:`Slet alle data`,
+  downloaded:`{f} downloadet`, copiedNotion:`Kopieret: indsæt det på en side i Notion`, dlMd:`Downloadet som .md`, mdDl:`Markdown downloadet`,
+  backupDl:`Backup downloadet`, restoreConfirm:`Dette erstatter alle dine nuværende data med backuppen. Fortsæt?`, restored:`Backup gendannet`,
+  badBackup:`Filen er ikke en gyldig backup`, wipe1:`Slet ALLE projekter, opskrifter og videoer?`, wipe2:`Sidste bekræftelse: det kan ikke fortrydes.`,
+  wiped:`Data slettet`, demoAdded:`Eksempler tilføjet`, noSpace:`⚠️ Ikke plads nok til at gemme`, saveErr:`⚠️ Fejl ved gemning`,
+  files:{projects:`Projekter`,patterns:`Opskrifter`,tutorials:`Videoer`},
+  csvP:[`Navn`,`Teknik`,`Type`,`Status`,`Fremskridt (%)`,`Omgange`,`Garnkategori`,`Fiber`,`Pind/hæklenål (mm)`,`Anslåede meter`,`Garn`,`Materialer`,`Opskrift`,`Video`,`Til`,`Start`,`Slut`,`Noter`],
+  csvPa:[`Titel`,`Teknik`,`Niveau`,`Garnkategori`,`Designer`,`Link`,`Termer`,`Tags`,`Favorit`,`Opskrift`],
+  csvT:[`Titel`,`Link`,`Kanal`,`Teknik`,`Niveau`,`Tags`,`Trin`,`Fuldført (%)`,`Noter`],
+  mdExported:`Eksporteret`, mdType:`Type`, mdLink:`Link`, mdWatch:`Se video`, mdFor:`Til`, mdDates:`Datoer`, mdYarns:`Garn`, mdSkeins:`{n} nøgler á {m} m`, mdLot:`parti`,
+  mat:{yarn:`Garn i kategori {cat} ({name} · {types}) — ca. {m1}–{m2} m`, hook:`Hæklenål {s}`, needles:`Strikkepinde {s}`, scissors:`Saks`, tapestry:`Stoppenål med rund spids (til at hæfte ender)`, tape:`Målebånd`, markers:`Maskemarkører`},
+  demo:{patTitle:`Amigurumi-kugle (eksempel)`, patTags:`grundteknik, amigurumi`, author:`Eksempel`,
+    patText:`Forkortelser: MR = magisk ring, fm = fastmaske, udt = udtagning, indt = indtagning\n\nOmg 1: 6 fm i MR (6)\nOmg 2: udt x6 (12)\nOmg 3: (1 fm, udt) x6 (18)\nOmg 4–7: 18 fm (18)\nOmg 8: (1 fm, indt) x6 (12)\n→ Fyld\nOmg 9: indt x6 (6)\nAfslut og hæft.`,
+    tutTitle:`Magisk ring (eksempel: rediger og indsæt dit videolink)`, tutQuery:`magisk ring hækling`, tutTags:`grundteknik`, tutNotes:`Eksempel. Rediger det og indsæt linket til en video, du kan lide.`,
+    steps:[`Gør garnet klar`,`Lav ringen`,`De første fastmasker`,`Luk ringen`], projName:`Min første kugle`, projNotes:`Eksempelprojekt.`},
+  cycNames:[`Lace`,`Superfin`,`Fin`,`Let`,`Medium`,`Tyk`,`Ekstra tyk`,`Jumbo`],
+  levels:{1:`Begynder`,2:`Let`,3:`Mellem`,4:`Erfaren`},
+  levelDesc:{1:`Projekter for begyndere: grundmasker og meget lidt formgivning.`,2:`Grundmasker, gentagne mønstre, enkle farveskift og enkel formgivning og montering.`,3:`Forskellige masker og teknikker (hulmønstre, snoninger eller enkle farvemønstre, arbejde rundt), mellemsvær formgivning og montering.`,4:`Avancerede teknikker: komplicerede mønstre, flerfarvestrik eller intarsia, detaljeret formgivning og fin montering.`},
+  estados:{idea:`💡 Idé`,curso:`🧶 I gang`,pausa:`⏸️ På pause`,hecho:`✅ Færdig`},
+  tipos:{
+    amigurumi:{l:`Amigurumi / figur`,fibra:`Bomuld eller akryl: maskerne står tydeligt, og figuren holder formen med fyld.`,extra:[`Fyld (polyesterfyld)`,`Sikkerhedsøjne (broderede til børn under 3 år)`,`Markør til starten af omgangen`,`Knappenåle til at placere delene`],nota:`Til amigurumi bruger man som regel en lidt mindre hæklenål end banderolen angiver, så hækletøjet bliver tæt, og fyldet ikke kan ses.`},
+    gorro:{l:`Hue`,fibra:`Merino, alpaka eller uld/akryl-blanding: varme og elastiske.`,extra:[`Maskemarkører`,`Pompon (valgfri)`],nota:`Ribkanten strikkes ofte på en pind 0,5–1 mm tyndere end resten.`},
+    bufanda:{l:`Halstørklæde / hals`,fibra:`Merino, alpaka eller bløde blandinger: de ligger mod halsen.`,extra:[]},
+    manta_bebe:{l:`Babytæppe`,fibra:`Bomuld, blød akryl eller superwash-merino: kan maskinvaskes.`,extra:[`Maskemarkører`],nota:`Til babyer bør man undgå langhåret garn (mohair) og knapper eller små dele, der kan gå løs.`},
+    manta:{l:`Stort tæppe`,fibra:`Akryl eller vaskbar blanding: billigere og nem at vedligeholde.`,extra:[`Maskemarkører`,`Rundpind med lang wire (hvis det strikkes)`]},
+    jersey:{l:`Sweater / cardigan (voksen)`,fibra:`Merino eller uld/bomuld-blanding.`,extra:[`Rundpinde`,`Maskemarkører`,`Hjælpegarn eller sikkerhedsnåle til at sætte masker på hold`,`Knapper (til cardigan)`],nota:`Til tøj med størrelser er strikkeprøven vigtig: få maskers forskel ændrer den færdige størrelse.`},
+    calcetines:{l:`Sokker`,fibra:`Strømpegarn: superwash-uld med 20–25 % polyamid (nylon), så det holder til slid.`,extra:[`Strømpepinde eller lille rundpind`,`Maskemarkører`]},
+    chal:{l:`Sjal`,fibra:`Merino, alpaka, silke eller blandinger: hulmønstret træder frem efter blokning.`,extra:[`Knappenåle og blokkemåtter`,`Maskemarkører`]},
+    bolso:{l:`Taske / kurv`,fibra:`Bomuld eller t-shirtgarn: stærkt og giver sig ikke under vægt.`,extra:[`Hanke`,`For (valgfrit)`,`Lukning eller knap`]},
+    posavasos:{l:`Bordskånere / dækkeservietter`,fibra:`100 % bomuld: tåler varme og kan vaskes.`,extra:[]},
+    ropa_bebe:{l:`Babytøj`,fibra:`Bomuld, superwash-merino eller babyakryl: blødt og vaskbart.`,extra:[`Knapper`,`Maskemarkører`],nota:`Til babyer bør man undgå langhåret garn (mohair) og sy knapperne godt fast.`},
+    otro:{l:`Andet`,fibra:`Efter opskriften.`,extra:[]}},
+  tips:[
+    `Lav altid en prøvelap på 10 × 10 cm og sammenlign med opskriftens strikkefasthed. Flere masker? Brug en tykkere pind. Færre? En tyndere.`,
+    `Gem banderolen fra hvert nøgle: den viser partinummeret. Køb alt garnet til et projekt fra samme parti for at undgå farveforskelle.`,
+    `Når du skal lære det, så vælg et glat, lyst garn i mellemtykkelse (kategori 4): så er maskerne nemmere at se.`,
+    `Gå efter pindens millimeter, ikke amerikanske bogstaver eller numre: de varierer mellem producenter.`,
+    `Stålhæklenåle (til tyndt garn) går omvendt: jo højere nummer, desto mindre nål.`,
+    `I engelske opskrifter skal du tjekke, om de bruger amerikanske eller britiske termer: britisk «dc» er en fastmaske («sc» i USA).`,
+    `I amigurumi og spiralhækling: sæt en markør i første maske på hver omgang, så du ikke mister tællingen.`,
+    `Blokning (fugt arbejdet og lad det tørre i den endelige form) udjævner maskerne og åbner hulmønstre.`,
+    `Køb et nøgle ekstra: det er bedre end at mangle og ikke kunne finde samme parti.`],
+  glossC:[[`Luftmaske`,`lm`],[`Kædemaske`,`km`],[`Fastmaske`,`fm`],[`Halvstangmaske`,`hstm`],[`Stangmaske`,`stm`],[`Dobbelt stangmaske`,`dbl-stm`],[`Udtagning (2 m i samme m)`,`udt`],[`Indtagning (2 m hæklet sammen)`,`indt`],[`Usynlig indtagning`,`usynl. indt`],[`Magisk ring`,`MR`],[`Omslag`,`oms`],[`Kun i forreste / bageste maskeled`,`forr. / bag. ml`],[`Omgang / række`,`omg / r`],[`Maske`,`m`],[`Gentag`,`gent`],[`Spring over`,`spr over`]],
+  glossK:[[`Slå masker op`,`slå op`],[`Lukke af`,`luk af`],[`Ret`,`r`],[`Vrang`,`vr`],[`Retstrik`,`—`],[`Glatstrik`,`—`],[`Rib (1 r, 1 vr / 2 r, 2 vr)`,`rib`],[`Perlestrik`,`—`],[`2 ret sammen`,`2 r sm`],[`2 ret drejet sammen (løft 2 m enkeltvis ret af)`,`2 dr r sm`],[`Omslag`,`oms`],[`Løft (tag løs af)`,`løft`],[`Udtagning (1 ny maske)`,`udt`],[`Sæt markør`,`sæt mark.`],[`Flyt markør`,`flyt mark.`],[`Retside / vrangside`,`rs / vrs`]],
+}};
+/* English (US/UK) columns shared by every language */
+const GLOSS_C_EN=[[`chain (ch)`,`chain (ch)`],[`slip stitch (sl st)`,`slip stitch (ss)`],[`single crochet (sc)`,`double crochet (dc)`],[`half double crochet (hdc)`,`half treble (htr)`],[`double crochet (dc)`,`treble (tr)`],[`treble (tr)`,`double treble (dtr)`],[`increase (inc)`,`increase (inc)`],[`decrease (dec / sc2tog)`,`decrease (dc2tog)`],[`invisible decrease (inv dec)`,`invisible decrease`],[`magic ring (MR)`,`magic loop`],[`yarn over (yo)`,`yarn round hook (yrh)`],[`front / back loop only (FLO / BLO)`,`front / back loop`],[`round (rnd) / row`,`round / row`],[`stitch (st)`,`stitch (st)`],[`repeat (rep)`,`repeat (rep)`],[`skip (sk)`,`miss`]];
+const GLOSS_K_EN=[`cast on (CO)`,`bind off (BO) · UK: cast off`,`knit (k)`,`purl (p)`,`garter stitch`,`stockinette stitch (st st) · UK: stocking stitch`,`ribbing (k1 p1, k2 p2)`,`seed stitch · UK: moss stitch`,`knit two together (k2tog)`,`slip slip knit (ssk)`,`yarn over (yo)`,`slip (sl)`,`make one (M1)`,`place marker (pm)`,`slip marker (sm)`,`right side / wrong side (RS / WS)`];
+
+/* =====================================================================
+   DATOS DE REFERENCIA (independientes del idioma)
+   Fuente: Craft Yarn Council's www.YarnStandards.com
+   ===================================================================== */
+const CYC = [
+  {cat:0,en:'Lace',tipos:'Fingering, 10-count crochet thread',ply:'1–3 ply',knit:'33–40',needle:[1.5,2.25],croch:'32–42',hook:[1.4,2.25]},
+  {cat:1,en:'Super Fine',tipos:'Sock, Fingering, Baby',ply:'4 ply',knit:'27–32',needle:[2.25,3.25],croch:'21–32',hook:[2.25,3.5]},
+  {cat:2,en:'Fine',tipos:'Sport, Baby',ply:'5 ply',knit:'23–26',needle:[3.25,3.75],croch:'16–20',hook:[3.5,4.5]},
+  {cat:3,en:'Light',tipos:'DK, Light Worsted',ply:'8 ply',knit:'21–24',needle:[3.75,4.5],croch:'12–17',hook:[4.5,5.5]},
+  {cat:4,en:'Medium',tipos:'Worsted, Afghan, Aran',ply:'10 ply',knit:'16–20',needle:[4.5,5.5],croch:'11–14',hook:[5.5,6.5]},
+  {cat:5,en:'Bulky',tipos:'Chunky, Craft, Rug',ply:'12 ply',knit:'12–15',needle:[5.5,8],croch:'8–11',hook:[6.5,9]},
+  {cat:6,en:'Super Bulky',tipos:'Super Bulky, Roving',ply:'14 ply',knit:'7–11',needle:[8,12.75],croch:'7–9',hook:[9,15]},
+  {cat:7,en:'Jumbo',tipos:'Jumbo, Roving',ply:'—',knit:'6',needle:[12.75,null],croch:'6',hook:[15,null]},
+];
+const NEEDLES = [[1.5,'000'],[1.75,'00'],[2,'0'],[2.25,'1'],[2.75,'2'],[3,''],[3.125,'3'],[3.25,'3'],[3.5,'4'],[3.75,'5'],[4,'6'],[4.25,'6'],[4.5,'7'],[5,'8'],[5.25,'9'],[5.5,'9'],[5.75,'10'],[6,'10'],[6.5,'10½'],[7,''],[8,'11'],[9,'13'],[10,'15'],[12.5,'17'],[12.75,'17'],[15,'19'],[19,'35'],[25,'50'],[35,'70']];
+const HOOKS = [[2.25,'B-1'],[2.5,''],[2.75,'C-2'],[3.125,'D'],[3.25,'D-3'],[3.5,'E-4'],[3.75,'F-5'],[4,'G-6'],[4.25,'G'],[4.5,'7'],[5,'H-8'],[5.25,'I'],[5.5,'I-9'],[5.75,'J'],[6,'J-10'],[6.5,'K-10½'],[7,''],[8,'L-11'],[9,'M/N-13'],[10,'N/P-15'],[11.5,'P-16'],[12,''],[15,'P/Q'],[15.75,'Q'],[16,'Q'],[19,'S'],[25,'T/U/X'],[30,'T/X']];
+const STEEL = [[0.75,'14'],[0.85,'13'],[1,'12'],[1.1,'11'],[1.3,'10'],[1.4,'9'],[1.5,'8'],[1.65,'7'],[1.8,'6'],[1.9,'5'],[2,'4'],[2.1,'3'],[2.25,'2']];
+/* Tipos de proyecto: datos numéricos. Los textos están en I18N[lang].tipos */
+const TIPOS = {
+  amigurumi:{cats:[3,2,4],base:'crochet',metros:[60,160],ajuste:-0.75},
+  gorro:{cats:[4,5,3],base:'punto',metros:[150,220]},
+  bufanda:{cats:[4,5,3],base:'punto',metros:[250,400]},
+  manta_bebe:{cats:[3,4],base:'punto',metros:[600,900]},
+  manta:{cats:[4,5,6],base:'punto',metros:[1400,2000]},
+  jersey:{cats:[3,4],base:'punto',metros:[1000,1500]},
+  calcetines:{cats:[1],base:'punto',metros:[350,420]},
+  chal:{cats:[1,0,2],base:'punto',metros:[400,800]},
+  bolso:{cats:[4,5,3],base:'crochet',metros:[200,350]},
+  posavasos:{cats:[3,4],base:'crochet',metros:[20,60]},
+  ropa_bebe:{cats:[2,3],base:'punto',metros:[250,450]},
+  otro:{cats:[4],base:'punto',metros:[100,300]},
+};
+const FACTOR = {0:2.2,1:1.7,2:1.4,3:1.18,4:1,5:0.78,6:0.6,7:0.45};
+const NAV = [['dash','🏠'],['projects','🧶'],['patterns','📒'],['tutorials','🎬'],['guide','📏'],['settings','⚙️']];
+const PRESETS = {
+  calido:{bg:'#faf6f0',surface:'#ffffff',text:'#3d2e24',primary:'#c0623f',accent:'#7d9a7a'},
+  pastel:{bg:'#fdf7fb',surface:'#ffffff',text:'#4a3f55',primary:'#c46fa5',accent:'#62b39c'},
+  minimal:{bg:'#f5f5f5',surface:'#ffffff',text:'#222222',primary:'#2f6fde',accent:'#5f8f6f'},
+  bosque:{bg:'#f1f4ee',surface:'#ffffff',text:'#26332a',primary:'#3f7a55',accent:'#c49a3c'},
+  noche:{bg:'#1d1b1a',surface:'#2a2725',text:'#f1ebe5',primary:'#e08a63',accent:'#9bbf98'},
+};
+const FONTS = {
+  sistema:'system-ui,-apple-system,"Segoe UI",Roboto,sans-serif',
+  redonda:'"Trebuchet MS","Avenir Next",Verdana,sans-serif',
+  serif:'Georgia,"Iowan Old Style","Times New Roman",serif',
+  mano:'"Comic Sans MS","Segoe Print","Bradley Hand",cursive',
+  mono:'"Courier New",ui-monospace,monospace',
+};
+
+/* =====================================================================
+   IDIOMA
+   ===================================================================== */
+function curLang(){return (S&&S.settings&&I18N[S.settings.lang])?S.settings.lang:'es'}
+const L=()=>I18N[curLang()];
+function t(k,vars){let v=L()[k];if(v==null){console.warn('i18n missing:',k);v=I18N.es[k]??k}
+  if(vars&&typeof v==='string')v=v.replace(/\{(\w+)\}/g,(m,x)=>vars[x]??m);return v}
+const tec=x=>x==='crochet'?t('crochet'):t('knit');
+const tipoTxt=k=>L().tipos[k]||L().tipos.otro;
+const tipoInfo=k=>({...(TIPOS[k]||TIPOS.otro),...tipoTxt(k)});
+const lvl=n=>L().levels[n]||'';
+const est=k=>L().estados[k]||'';
+const catName=c=>L().cycNames[c];
+const num=n=>String(+n).replace('.',t('dec'));
+const mm=n=>n==null||n===''?'':num(n)+' mm';
+function fmtRange(r){return r[1]==null?`${mm(r[0])} ${t('orMore')}`:`${num(r[0])}–${mm(r[1])}`}
+function gauge(c,kind){const u=kind==='k'?t('stsU'):(c.cat===0?t('dcU'):t('stsU'));
+  return c.cat===7?`6 ${u} ${t('orFewer')}`:`${kind==='k'?c.knit:c.croch} ${u}${c.cat===0?' *':''}`}
+function setLang(l){S.settings.lang=l;document.documentElement.lang=l;save();applyTheme();render()}
+
+/* =====================================================================
+   ALMACENAMIENTO (IndexedDB con respaldo en localStorage)
+   ===================================================================== */
+const KEY='rincon-lana-v1';
+const Store={
+  db:null,
+  open(){return new Promise(res=>{try{const r=indexedDB.open('rincon-lana',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>{this.db=r.result;res()};r.onerror=()=>res();}catch(e){res()}})},
+  get(){return new Promise(res=>{if(!this.db){try{res(JSON.parse(localStorage.getItem(KEY)))}catch(e){res(null)}return}
+    const q=this.db.transaction('kv').objectStore('kv').get(KEY);q.onsuccess=()=>res(q.result||null);q.onerror=()=>res(null)})},
+  set(v){return new Promise(res=>{if(!this.db){try{localStorage.setItem(KEY,JSON.stringify(v))}catch(e){toast(t('noSpace'))}res();return}
+    const tr=this.db.transaction('kv','readwrite');tr.objectStore('kv').put(v,KEY);tr.oncomplete=()=>res();tr.onerror=()=>{toast(t('saveErr'));res()}})}
+};
+let S=null;
+function detectLang(){const n=(navigator.language||'es').slice(0,2).toLowerCase();return I18N[n]?n:'es'}
+const DEFAULT_SETTINGS=()=>({preset:'calido',theme:{...PRESETS.calido},font:'sistema',radius:14,name:'',logo:'🧶',lang:detectLang()});
+function blankState(){return {version:2,projects:[],patterns:[],tutorials:[],settings:DEFAULT_SETTINGS()}}
+let saveTimer=null;
+function save(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>Store.set(S),250)}
+const DEFAULT_NAMES=Object.values(I18N).map(x=>x.appNameDef);
+const appName=()=>(S.settings.name&&!DEFAULT_NAMES.includes(S.settings.name))?S.settings.name:t('appNameDef');
+
+/* =====================================================================
+   UTILIDADES
+   ===================================================================== */
+const $=s=>document.querySelector(s);
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const today=()=>new Date().toISOString().slice(0,10);
+function toast(m){const el=$('#toast');el.textContent=m;el.classList.add('show');clearTimeout(el._h);el._h=setTimeout(()=>el.classList.remove('show'),2200)}
+function openModal(html){$('#modal-body').innerHTML=html;$('#modal').classList.remove('hidden');const f=$('#modal-body input,#modal-body select,#modal-body textarea');if(f)f.focus()}
+function closeModal(){$('#modal').classList.add('hidden');$('#modal-body').innerHTML=''}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+function parseTime(s){s=String(s||'').trim();if(!s)return 0;if(/^\d+$/.test(s))return +s;const p=s.split(':').map(Number);if(p.some(isNaN))return 0;return p.reduce((a,b)=>a*60+b,0)}
+function fmtTime(s){s=Math.max(0,Math.round(s||0));const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return (h?h+':'+String(m).padStart(2,'0'):m)+':'+String(x).padStart(2,'0')}
+function readFile(file,asImage){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>{if(!asImage)return res(r.result);
+  const img=new Image();img.onload=()=>{const max=1100;let w=img.width,h=img.height;if(w>max||h>max){const k=max/Math.max(w,h);w=Math.round(w*k);h=Math.round(h*k)}
+  const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);res(c.toDataURL('image/jpeg',.82))};img.onerror=()=>res(r.result);img.src=r.result};r.onerror=rej;r.readAsDataURL(file)})}
+function download(name,content,type){const b=content instanceof Blob?content:new Blob([content],{type});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
+function openDataUrl(d){fetch(d).then(r=>r.blob()).then(b=>window.open(URL.createObjectURL(b),'_blank'))}
+const byId=(arr,id)=>arr.find(x=>x.id===id);
+function snap(v,list){let best=list[0][0];for(const [s] of list){if(Math.abs(s-v)<Math.abs(best-v))best=s}return best}
+function sizeLabel(v,tc){const list=tc==='crochet'?HOOKS:NEEDLES;const f=list.find(x=>x[0]===+v);return mm(v)+(f&&f[1]?` (US ${f[1]})`:'')}
+const tagList=s=>(s||'').split(',').filter(x=>x.trim()).map(x=>`<span class="tag grey">#${esc(x.trim())}</span>`).join('');
+
+/* =====================================================================
+   MOTOR DE SUGERENCIAS
+   ===================================================================== */
+function suggest(p){
+  const ti=tipoInfo(p.tipo);
+  const cat=(p.categoria!==''&&p.categoria!=null)?+p.categoria:ti.cats[0];
+  const c=CYC[cat];
+  const range=p.tecnica==='crochet'?c.hook:c.needle;
+  let base=range[1]==null?range[0]:(range[0]+range[1])/2;
+  if(p.tecnica==='crochet'&&ti.ajuste)base+=ti.ajuste;
+  const list=p.tecnica==='crochet'?HOOKS:NEEDLES;
+  const aguja=snap(Math.max(base,list[0][0]),list);
+  let k=FACTOR[cat]/FACTOR[ti.cats[0]];
+  if(p.tecnica!==ti.base)k*=p.tecnica==='crochet'?1.25:0.8;
+  const metros=ti.metros.map(x=>Math.round(x*k/10)*10);
+  return {cat,c,aguja,rangeTxt:fmtRange(range),metros,fibra:ti.fibra,nota:ti.nota||'',recCats:ti.cats,tipo:ti};
+}
+function genMateriales(p){
+  const s=suggest(p),M=t('mat');
+  const size=sizeLabel(p.aguja||s.aguja,p.tecnica);
+  const items=[
+    M.yarn.replace('{cat}',s.cat).replace('{name}',catName(s.cat)).replace('{types}',CYC[s.cat].tipos).replace('{m1}',s.metros[0]).replace('{m2}',s.metros[1]),
+    (p.tecnica==='crochet'?M.hook:M.needles).replace('{s}',size),
+    M.scissors,M.tapestry,M.tape,M.markers,...s.tipo.extra];
+  return [...new Set(items)].map(x=>({id:uid(),texto:x,hecho:false,auto:true}));
+}
+
+/* =====================================================================
+   TEMA
+   ===================================================================== */
+function applyTheme(){
+  const st=S.settings,r=document.documentElement.style;
+  for(const k of ['bg','surface','text','primary','accent'])r.setProperty('--'+k,st.theme[k]);
+  r.setProperty('--radius',st.radius+'px');r.setProperty('--font',FONTS[st.font]||FONTS.sistema);
+  $('#brand-name').textContent=appName();$('#brand-logo').textContent=st.logo;document.title=appName();
+  $('#side-foot').innerHTML=t('sideFoot');document.documentElement.lang=curLang();
+  $('#langsel').innerHTML=Object.entries(LANGS).map(([k,v])=>`<option value="${k}" ${curLang()===k?'selected':''}>${v}</option>`).join('');
+  $('#langsel').title=t('language');$('#langsel').setAttribute('aria-label',t('language'));
+}
+
+/* =====================================================================
+   NAVEGACIÓN
+   ===================================================================== */
+let V={view:'dash',id:null,tab:null};
+const filters={projects:{q:'',estado:'',tec:''},patterns:{q:'',tec:'',lvl:''},tutorials:{q:'',tec:''}};
+function go(view,id=null,tab=null){V={view,id,tab};render();window.scrollTo(0,0)}
+function renderNav(){
+  const active=V.view.replace(/^(project|pattern|tutorial)$/,'$1s');const N=t('nav');
+  $('#nav').innerHTML=NAV.map(([k,i])=>`<button class="${active===k?'active':''}" onclick="go('${k}')"><span class="ico">${i}</span>${N[k]}</button>`).join('');
+}
+function render(){
+  renderNav();
+  const fn={dash:viewDash,projects:viewProjects,project:viewProject,patterns:viewPatterns,pattern:viewPattern,tutorials:viewTutorials,tutorial:viewTutorial,guide:viewGuide,settings:viewSettings}[V.view]||viewDash;
+  $('#view').innerHTML=fn();
+  if(V.view==='tutorial')mountPlayer();
+}
+const tecSelect=(name,val,long)=>`<select name="${name}"${name==='tecnica'&&long?` onchange="formSuggest('tec')"`:''}><option value="crochet" ${val==='crochet'?'selected':''}>${long?t('crochetLong'):t('crochet')}</option><option value="punto" ${val==='punto'?'selected':''}>${long?t('knitLong'):t('knit')}</option></select>`;
+const tecFilter=(col)=>`<select onchange="filters.${col}.tec=this.value;render()"><option value="">${t('bothCrafts')}</option><option value="crochet" ${filters[col].tec==='crochet'?'selected':''}>${t('crochet')}</option><option value="punto" ${filters[col].tec==='punto'?'selected':''}>${t('knit')}</option></select>`;
+function optList(obj,sel){return Object.entries(obj).map(([k,v])=>`<option value="${k}" ${String(sel)===String(k)?'selected':''}>${typeof v==='string'?v:v.l}</option>`).join('')}
+function catOptions(sel,rec=[]){return CYC.map(c=>`<option value="${c.cat}" ${+sel===c.cat?'selected':''}>${c.cat} · ${catName(c.cat)} (${c.tipos})${rec.includes(c.cat)?' ★':''}</option>`).join('')}
+function rerenderList(){const a=document.activeElement;const val=(a&&a.value)||'';render();const s=$('.toolbar input[type=search]');if(s){s.focus();s.setSelectionRange(val.length,val.length)}}
+const foot=(cancelOnly)=>`<div class="row" style="justify-content:flex-end;margin-top:14px"><button type="button" class="btn" onclick="closeModal()">${t('cancel')}</button><button class="btn primary">${t('save')}</button></div>`;
+
+/* =====================================================================
+   PANEL
+   ===================================================================== */
+function viewDash(){
+  const P=S.projects,enCurso=P.filter(p=>p.estado==='curso');
+  const tips=L().tips,tip=tips[new Date().getDate()%tips.length];
+  const h=new Date().getHours();const saludo=h<13?t('greetM'):h<20?t('greetA'):t('greetE');
+  return `
+  <h1>${saludo}</h1><p class="sub">${t('dashSub')}</p>
+  <div class="grid g4" style="margin-bottom:20px">
+    ${stat(enCurso.length,t('stInProg'),'projects')}${stat(P.filter(p=>p.estado==='hecho').length,t('stDone'),'projects')}
+    ${stat(S.patterns.length,t('stPat'),'patterns')}${stat(S.tutorials.length,t('stTut'),'tutorials')}
+  </div>
+  <div class="grid g2">
+    <div class="card">
+      <div class="row between"><h2>${t('keepGoing')}</h2><button class="btn sm primary" onclick="editProject()">${t('addProject')}</button></div>
+      ${enCurso.length?enCurso.map(p=>`
+        <div style="padding:10px 0;border-bottom:1px solid var(--border)">
+          <div class="row between"><a href="#" onclick="go('project','${p.id}');return false"><b>${esc(p.name)}</b></a>
+          <span class="small muted">${tec(p.tecnica)} · ${mm(p.aguja)}</span></div>
+          <div class="row" style="margin-top:6px"><div class="bar" style="flex:1"><i style="width:${p.progreso||0}%"></i></div><span class="small">${p.progreso||0}%</span>
+          <button class="btn sm" onclick="bumpRow('${p.id}',-1)">−</button><span class="small" id="rc-${p.id}">${t('row')} ${p.vueltas||0}</span><button class="btn sm" onclick="bumpRow('${p.id}',1)">＋</button></div>
+        </div>`).join(''):`<div class="empty">${t('noInProg')}<br><br><button class="btn primary" onclick="editProject()">${t('startOne')}</button></div>`}
+    </div>
+    <div class="grid" style="align-content:start">
+      <div class="card"><h3>${t('tipDay')}</h3><p style="margin:0">${tip}</p></div>
+      <div class="card"><div class="row between"><h3>${t('lastTut')}</h3><a href="#" class="small" onclick="go('tutorials');return false">${t('seeAll')}</a></div>
+        ${S.tutorials.slice(-4).reverse().map(tu=>`<div class="step" onclick="go('tutorial','${tu.id}')"><span>${tu.provider==='youtube'?'▶️':'🎞️'}</span><span class="txt" style="flex:1">${esc(tu.titulo)}</span><span class="small muted">${pct(tu)}%</span></div>`).join('')||`<p class="muted small">${t('noTutYet')}</p>`}
+      </div>
+      <div class="card"><div class="row between"><h3>${t('recentPat')}</h3><a href="#" class="small" onclick="go('patterns');return false">${t('seeAll')}</a></div>
+        ${S.patterns.slice(-4).reverse().map(p=>`<div class="step" onclick="go('pattern','${p.id}')"><span>${p.fav?'⭐':'📄'}</span><span class="txt" style="flex:1">${esc(p.titulo)}</span><span class="tag grey">${lvl(p.nivel)}</span></div>`).join('')||`<p class="muted small">${t('noPatYet')}</p>`}
+      </div>
+    </div>
+  </div>`;
+}
+const pct=tu=>tu.pasos.length?Math.round(tu.pasos.filter(x=>x.hecho).length/tu.pasos.length*100):0;
+function stat(n,l,v){return `<div class="card stat click" onclick="go('${v}')"><div class="n">${n}</div><div class="l">${l}</div></div>`}
+function bumpRow(id,d){const p=byId(S.projects,id);p.vueltas=Math.max(0,(p.vueltas||0)+d);save();const el=document.getElementById('rc-'+id);if(el)el.textContent=t('row')+' '+p.vueltas;const big=document.getElementById('bigrc');if(big)big.textContent=p.vueltas}
+
+/* =====================================================================
+   PROYECTOS
+   ===================================================================== */
+function viewProjects(){
+  const f=filters.projects;
+  const list=S.projects.filter(p=>(!f.q||(p.name+' '+(p.notas||'')).toLowerCase().includes(f.q.toLowerCase()))&&(!f.estado||p.estado===f.estado)&&(!f.tec||p.tecnica===f.tec));
+  return `<div class="row between"><div><h1>${t('projTitle')}</h1><p class="sub">${t('projSub')}</p></div><button class="btn primary" onclick="editProject()">${t('newProject')}</button></div>
+  <div class="toolbar">
+    <input type="search" placeholder="${t('search')}" value="${esc(f.q)}" oninput="filters.projects.q=this.value;rerenderList()">
+    <select onchange="filters.projects.estado=this.value;render()"><option value="">${t('allStates')}</option>${optList(L().estados,f.estado)}</select>
+    ${tecFilter('projects')}
+  </div>
+  ${list.length?`<div class="grid g3">${list.map(projectCard).join('')}</div>`:`<div class="empty">${S.projects.length?t('noMatchProj'):t('noProj')}</div>`}`;
+}
+function projectCard(p){
+  return `<div class="card click" onclick="go('project','${p.id}')">
+    <div class="thumb">${p.imagen?`<img src="${p.imagen}" alt="">`:(p.tecnica==='crochet'?'🪝':'🧣')}</div>
+    <div class="row between"><b>${esc(p.name)}</b><span class="small">${est(p.estado)}</span></div>
+    <div style="margin:6px 0"><span class="tag">${tec(p.tecnica)}</span><span class="tag alt">${tipoTxt(p.tipo).l}</span><span class="tag grey">${t('cat')} ${p.categoria} · ${mm(p.aguja)}</span></div>
+    <div class="row"><div class="bar" style="flex:1"><i style="width:${p.progreso||0}%"></i></div><span class="small">${p.progreso||0}%</span></div>
+  </div>`;
+}
+function editProject(id){
+  const p=id?byId(S.projects,id):{tecnica:'crochet',tipo:'amigurumi',estado:'curso',inicio:today(),progreso:0};
+  if(!id){const s=suggest({...p,categoria:null});p.categoria=s.cat;p.fibra=s.fibra;p.aguja=s.aguja}
+  const s=suggest(p);
+  openModal(`<h2>${id?t('editProjT'):t('newProjT')}</h2>
+  <form id="pf" onsubmit="saveProject(event,'${id||''}')">
+    <div class="field"><label>${t('name')}</label><input type="text" name="name" required value="${esc(p.name||'')}" placeholder="${t('namePh')}"></div>
+    <div class="fgrid">
+      <div class="field"><label>${t('technique')}</label>${tecSelect('tecnica',p.tecnica,true)}</div>
+      <div class="field"><label>${t('projType')}</label><select name="tipo" onchange="formSuggest('tipo')">${optList(L().tipos,p.tipo)}</select></div>
+      <div class="field"><label>${t('status')}</label><select name="estado">${optList(L().estados,p.estado)}</select></div>
+    </div>
+    <div class="fgrid">
+      <div class="field"><label>${t('weightRec')}</label><select name="categoria" onchange="formSuggest('cat')">${catOptions(p.categoria,s.recCats)}</select></div>
+      <div class="field"><label id="agl">${p.tecnica==='crochet'?t('hook'):t('needles')} (mm)</label><input type="number" step="0.05" min="0.5" name="aguja" value="${p.aguja}"></div>
+    </div>
+    <div class="field"><label>${t('fiber')}</label><input type="text" name="fibra" value="${esc(p.fibra||'')}"></div>
+    <div id="sugbox"></div>
+    <div class="fgrid">
+      <div class="field"><label>${t('linkedPat')}</label><select name="patternId"><option value="">${t('none')}</option>${S.patterns.map(x=>`<option value="${x.id}" ${p.patternId===x.id?'selected':''}>${esc(x.titulo)}</option>`).join('')}</select></div>
+      <div class="field"><label>${t('linkedTut')}</label><select name="tutorialId"><option value="">${t('none')}</option>${S.tutorials.map(x=>`<option value="${x.id}" ${p.tutorialId===x.id?'selected':''}>${esc(x.titulo)}</option>`).join('')}</select></div>
+    </div>
+    <div class="fgrid">
+      <div class="field"><label>${t('startDate')}</label><input type="date" name="inicio" value="${p.inicio||''}"></div>
+      <div class="field"><label>${t('endDate')}</label><input type="date" name="fin" value="${p.fin||''}"></div>
+      <div class="field"><label>${t('forWhom')}</label><input type="text" name="para" value="${esc(p.para||'')}"></div>
+    </div>
+    <div class="field"><label>${t('notes')}</label><textarea name="notas">${esc(p.notas||'')}</textarea></div>
+    <div class="field"><label>${t('photoOpt')}</label><input type="file" name="imagen" accept="image/*"></div>
+    ${id?`<label class="row" style="font-weight:500"><input type="checkbox" name="regen"> ${t('regen')}</label>`:''}
+    ${foot()}
+  </form>`);
+  formSuggest(null);
+}
+function formSuggest(changed){
+  const f=$('#pf');if(!f)return;
+  const p={tecnica:f.tecnica.value,tipo:f.tipo.value,categoria:changed==='tipo'?null:f.categoria.value};
+  const s=suggest(p);
+  if(changed==='tipo'){f.categoria.innerHTML=catOptions(s.cat,s.recCats);f.fibra.value=s.fibra}
+  if(changed==='tipo'||changed==='cat'||changed==='tec')f.aguja.value=s.aguja;
+  if(changed==='tec')f.categoria.innerHTML=catOptions(f.categoria.value,s.recCats);
+  $('#agl').textContent=(p.tecnica==='crochet'?t('hook'):t('needles'))+' (mm)';
+  const off=!s.recCats.includes(s.cat);
+  $('#sugbox').innerHTML=`<div class="note"><b>${t('suggTitle')}</b> ${t('sugg',{tipo:s.tipo.l.toLowerCase(),tec:tec(p.tecnica).toLowerCase(),cat:s.cat,catName:catName(s.cat),range:s.rangeTxt,size:sizeLabel(s.aguja,p.tecnica),m1:s.metros[0],m2:s.metros[1]})}
+    ${s.nota?`<br>${s.nota}`:''}${off?`<br>${t('offWeight')}`:''}</div>`;
+}
+async function saveProject(e,id){
+  e.preventDefault();const f=e.target;
+  const d={name:f.name.value.trim(),tecnica:f.tecnica.value,tipo:f.tipo.value,estado:f.estado.value,categoria:+f.categoria.value,aguja:+f.aguja.value,fibra:f.fibra.value,
+    patternId:f.patternId.value,tutorialId:f.tutorialId.value,inicio:f.inicio.value,fin:f.fin.value,para:f.para.value,notas:f.notas.value};
+  if(f.imagen.files[0])d.imagen=await readFile(f.imagen.files[0],true);
+  if(d.estado==='hecho'&&!d.fin)d.fin=today();
+  let p;
+  if(id){p=byId(S.projects,id);Object.assign(p,d);if(f.regen&&f.regen.checked){p.materiales=[...genMateriales(p),...(p.materiales||[]).filter(m=>!m.auto)]}}
+  else{p={id:uid(),created:Date.now(),progreso:0,vueltas:0,lanas:[],...d};p.materiales=genMateriales(p);S.projects.push(p)}
+  if(p.estado==='hecho')p.progreso=100;
+  save();closeModal();go('project',p.id);toast(t('projSaved'));
+}
+function viewProject(){
+  const p=byId(S.projects,V.id);if(!p)return viewProjects();
+  const s=suggest(p),c=CYC[p.categoria]??CYC[4];
+  const pat=byId(S.patterns,p.patternId),tut=byId(S.tutorials,p.tutorialId);
+  const totM=(p.lanas||[]).reduce((a,l)=>a+(+l.metros||0)*(+l.ovillos||0),0);
+  const mats=p.materiales||[];const done=mats.filter(m=>m.hecho).length;
+  return `<button class="btn ghost" onclick="go('projects')">${t('backProj')}</button>
+  <div class="row between" style="margin:8px 0 18px"><div><h1>${esc(p.name)}</h1>
+    <span class="tag">${tec(p.tecnica)}</span><span class="tag alt">${tipoTxt(p.tipo).l}</span><span class="tag grey">${est(p.estado)}</span>${p.para?`<span class="tag grey">${t('mdFor')}: ${esc(p.para)}</span>`:''}</div>
+    <div class="row"><button class="btn" onclick="copyProjectMd('${p.id}')">${t('copyNotion')}</button><button class="btn" onclick="editProject('${p.id}')">${t('edit')}</button><button class="btn danger" onclick="delItem('projects','${p.id}')">🗑️</button></div></div>
+  <div class="grid g2">
+    <div class="grid" style="align-content:start">
+      ${p.imagen?`<img class="hero-img" src="${p.imagen}" alt="">`:''}
+      <div class="card"><h2>${t('progress')}</h2>
+        <div class="row"><input type="range" min="0" max="100" step="5" value="${p.progreso||0}" style="flex:1;accent-color:var(--accent)" oninput="this.nextElementSibling.textContent=this.value+'%'" onchange="setProg('${p.id}',this.value)"><b>${p.progreso||0}%</b></div>
+        <h3 style="margin-top:16px">${t('rowCounter')}</h3>
+        <div class="counter"><button class="btn big" onclick="bumpRow('${p.id}',-1)">−</button><span class="num" id="bigrc">${p.vueltas||0}</span><button class="btn big primary" onclick="bumpRow('${p.id}',1)">＋</button><button class="btn sm ghost" onclick="resetRows('${p.id}')">${t('reset')}</button></div>
+      </div>
+      <div class="card"><h2>${t('techSheet')}</h2>
+        <div class="kv">
+          <b>${t('yarn')}</b><span>${t('category')} ${c.cat} · ${catName(c.cat)}${curLang()!=='en'?` (${c.en})`:''} — ${c.tipos}</span>
+          <b>${t('fiber')}</b><span>${esc(p.fibra||s.fibra)}</span>
+          <b>${p.tecnica==='crochet'?t('hook'):t('needles')}</b><span>${sizeLabel(p.aguja,p.tecnica)} · ${t('offRange')} ${s.rangeTxt}</span>
+          <b>${t('typGauge')}</b><span>${p.tecnica==='crochet'?t('gaugeC',{g:gauge(c,'c')}):t('gaugeK',{g:gauge(c,'k')})}</span>
+          <b>${t('estYarn')}</b><span>${s.metros[0]}–${s.metros[1]} m${totM?` · ${t('youHave',{n:totM})}`:''}</span>
+          ${p.inicio?`<b>${t('start')}</b><span>${p.inicio}${p.fin?' → '+p.fin:''}</span>`:''}
+        </div>
+        ${s.nota?`<div class="note">${s.nota}</div>`:''}
+        <p class="small muted" style="margin-bottom:0">${t('cycNote')}</p>
+      </div>
+      ${pat||tut?`<div class="card"><h2>${t('linked')}</h2>
+        ${pat?`<div class="step" onclick="go('pattern','${pat.id}')">📒 <span class="txt">${esc(pat.titulo)}</span></div>`:''}
+        ${tut?`<div class="step" onclick="go('tutorial','${tut.id}')">🎬 <span class="txt">${esc(tut.titulo)}</span></div>`:''}</div>`:''}
+      ${p.notas?`<div class="card"><h2>${t('notes')}</h2><div style="white-space:pre-wrap">${esc(p.notas)}</div></div>`:''}
+    </div>
+    <div class="grid" style="align-content:start">
+      <div class="card"><div class="row between"><h2>${t('materials')}</h2><span class="small muted">${t('prepared',{a:done,b:mats.length})}</span></div>
+        ${mats.map(m=>`<div class="check ${m.hecho?'done':''}"><input type="checkbox" ${m.hecho?'checked':''} onchange="toggleMat('${p.id}','${m.id}')"><span>${esc(m.texto)}</span><button class="x" title="${t('remove')}" onclick="delMat('${p.id}','${m.id}')">✕</button></div>`).join('')}
+        <form class="row" style="margin-top:10px" onsubmit="addMat(event,'${p.id}')"><input type="text" name="t" placeholder="${t('addMatPh')}" style="flex:1"><button class="btn">${t('add')}</button></form>
+      </div>
+      <div class="card"><div class="row between"><h2>${t('myYarns')}</h2><button class="btn sm" onclick="editYarn('${p.id}')">${t('addYarn')}</button></div>
+        ${(p.lanas||[]).length?`<div class="tablewrap"><table><tr><th>${t('thYarn')}</th><th>${t('thColorLot')}</th><th>${t('thSkeins')}</th><th>${t('thMPer')}</th><th></th></tr>
+        ${p.lanas.map(l=>`<tr><td><b>${esc(l.marca)}</b><br><span class="small muted">${esc(l.comp||'')}${l.gramos?' · '+esc(l.gramos)+' g':''}</span></td><td>${esc(l.color||'')}${l.lote?`<br><span class="small muted">${t('lot')} ${esc(l.lote)}</span>`:''}</td><td>${esc(l.ovillos||'')}</td><td>${esc(l.metros||'')}</td>
+        <td><button class="btn sm ghost" onclick="editYarn('${p.id}','${l.id}')">✏️</button><button class="btn sm ghost" onclick="delYarn('${p.id}','${l.id}')">✕</button></td></tr>`).join('')}</table></div>
+        ${totM?`<p class="small">${t('total')}: <b>${totM} m</b> ${totM<s.metros[0]?t('belowEst'):totM>=s.metros[1]?t('enough'):t('withinEst')}</p>`:''}`:
+        `<p class="muted small">${t('yarnHint')}</p>`}
+        <p class="small muted">${t('howMany',{m:s.metros[1],a:Math.ceil(s.metros[1]/100),b:Math.ceil(s.metros[1]/200)})}</p>
+      </div>
+    </div>
+  </div>`;
+}
+function resetRows(id){if(confirm(t('resetConfirm'))){byId(S.projects,id).vueltas=0;save();render()}}
+function setProg(id,v){const p=byId(S.projects,id);p.progreso=+v;if(+v===100&&p.estado!=='hecho'&&confirm(t('markDone'))){p.estado='hecho';p.fin=p.fin||today()}save();render()}
+function toggleMat(pid,mid){const m=byId(byId(S.projects,pid).materiales,mid);m.hecho=!m.hecho;save();render()}
+function delMat(pid,mid){const p=byId(S.projects,pid);p.materiales=p.materiales.filter(m=>m.id!==mid);save();render()}
+function addMat(e,pid){e.preventDefault();const v=e.target.t.value.trim();if(!v)return;byId(S.projects,pid).materiales.push({id:uid(),texto:v,hecho:false,auto:false});save();render()}
+function editYarn(pid,lid){
+  const p=byId(S.projects,pid);const l=lid?byId(p.lanas,lid):{};
+  openModal(`<h2>${lid?t('editYarnT'):t('addYarnT')}</h2><form onsubmit="saveYarn(event,'${pid}','${lid||''}')">
+  <div class="fgrid"><div class="field"><label>${t('brand')}</label><input type="text" name="marca" required value="${esc(l.marca||'')}" placeholder="${t('brandPh')}"></div>
+  <div class="field"><label>${t('comp')}</label><input type="text" name="comp" value="${esc(l.comp||'')}" placeholder="${t('compPh')}"></div></div>
+  <div class="fgrid"><div class="field"><label>${t('color')}</label><input type="text" name="color" value="${esc(l.color||'')}"></div>
+  <div class="field"><label>${t('dyeLot')}</label><input type="text" name="lote" value="${esc(l.lote||'')}"></div></div>
+  <div class="fgrid"><div class="field"><label>${t('nSkeins')}</label><input type="number" min="0" step="0.5" name="ovillos" value="${esc(l.ovillos||'')}"></div>
+  <div class="field"><label>${t('mPerSkein')}</label><input type="number" min="0" name="metros" value="${esc(l.metros||'')}"></div>
+  <div class="field"><label>${t('gPerSkein')}</label><input type="number" min="0" name="gramos" value="${esc(l.gramos||'')}"></div></div>
+  ${foot()}</form>`);
+}
+function saveYarn(e,pid,lid){e.preventDefault();const f=e.target,p=byId(S.projects,pid);p.lanas=p.lanas||[];
+  const d={marca:f.marca.value,comp:f.comp.value,color:f.color.value,lote:f.lote.value,ovillos:f.ovillos.value,metros:f.metros.value,gramos:f.gramos.value};
+  if(lid)Object.assign(byId(p.lanas,lid),d);else p.lanas.push({id:uid(),...d});save();closeModal();render()}
+function delYarn(pid,lid){const p=byId(S.projects,pid);p.lanas=p.lanas.filter(l=>l.id!==lid);save();render()}
+function delItem(col,id){if(!confirm(t('delConfirm')))return;S[col]=S[col].filter(x=>x.id!==id);save();go(col);toast(t('deleted'))}
+
+/* =====================================================================
+   PATRONES
+   ===================================================================== */
+function viewPatterns(){
+  const f=filters.patterns;
+  const list=S.patterns.filter(p=>(!f.q||(p.titulo+' '+(p.autor||'')+' '+(p.tags||'')).toLowerCase().includes(f.q.toLowerCase()))&&(!f.tec||p.tecnica===f.tec)&&(!f.lvl||String(p.nivel)===f.lvl))
+    .sort((a,b)=>(b.fav?1:0)-(a.fav?1:0));
+  return `<div class="row between"><div><h1>${t('patTitle')}</h1><p class="sub">${t('patSub')}</p></div><button class="btn primary" onclick="editPattern()">${t('newPattern')}</button></div>
+  <div class="toolbar">
+    <input type="search" placeholder="${t('searchPat')}" value="${esc(f.q)}" oninput="filters.patterns.q=this.value;rerenderList()">
+    ${tecFilter('patterns')}
+    <select onchange="filters.patterns.lvl=this.value;render()"><option value="">${t('anyLevel')}</option>${optList(L().levels,f.lvl)}</select>
+  </div>
+  ${list.length?`<div class="grid g3">${list.map(p=>`<div class="card click" onclick="go('pattern','${p.id}')">
+    <div class="thumb">${p.imagen?`<img src="${p.imagen}" alt="">`:'📒'}</div>
+    <div class="row between"><b>${esc(p.titulo)}</b><span>${p.fav?'⭐':''}</span></div>
+    <div class="small muted">${esc(p.autor||'')}</div>
+    <div style="margin-top:6px"><span class="tag">${tec(p.tecnica)}</span><span class="tag alt">${lvl(p.nivel)}</span>${hasCat(p)?`<span class="tag grey">${t('cat')} ${p.categoria}</span>`:''}${p.archivo?'<span class="tag grey">📎 PDF</span>':''}</div>
+  </div>`).join('')}</div>`:`<div class="empty">${S.patterns.length?t('noMatchPat'):t('noPat')}</div>`}`;
+}
+const hasCat=p=>p.categoria!==''&&p.categoria!=null;
+function editPattern(id){
+  const p=id?byId(S.patterns,id):{tecnica:'crochet',nivel:1,categoria:4,term:curLang()==='en'?'us':curLang()};
+  openModal(`<h2>${id?t('editPatT'):t('newPatT')}</h2><form onsubmit="savePattern(event,'${id||''}')">
+  <div class="field"><label>${t('title')}</label><input type="text" name="titulo" required value="${esc(p.titulo||'')}"></div>
+  <div class="fgrid">
+    <div class="field"><label>${t('technique')}</label>${tecSelect('tecnica',p.tecnica,false)}</div>
+    <div class="field"><label>${t('levelCyc')}</label><select name="nivel">${optList(L().levels,p.nivel)}</select></div>
+    <div class="field"><label>${t('yarnWeight')}</label><select name="categoria"><option value="">—</option>${catOptions(p.categoria)}</select></div>
+  </div>
+  <div class="fgrid">
+    <div class="field"><label>${t('author')}</label><input type="text" name="autor" value="${esc(p.autor||'')}"></div>
+    <div class="field"><label>${t('linkLbl')}</label><input type="url" name="url" value="${esc(p.url||'')}" placeholder="https://"></div>
+  </div>
+  <div class="fgrid">
+    <div class="field"><label>${t('terminology')}</label><select name="term">${optList(t('term'),p.term||'es')}</select></div>
+    <div class="field"><label>${t('tagsLbl')}</label><input type="text" name="tags" value="${esc(p.tags||'')}" placeholder="${t('tagsPh')}"></div>
+  </div>
+  <div class="field"><label>${t('patText')}</label><textarea name="texto" style="min-height:180px;font-family:ui-monospace,monospace" placeholder="${t('patTextPh')}">${esc(p.texto||'')}</textarea></div>
+  <div class="fgrid">
+    <div class="field"><label>${t('photo')}</label><input type="file" name="imagen" accept="image/*"></div>
+    <div class="field"><label>${t('fileLbl')}</label><input type="file" name="archivo" accept=".pdf,image/*">${p.archivo?`<span class="small muted">${t('current')}: ${esc(p.archivoNombre)}</span>`:''}</div>
+  </div>
+  <label class="row" style="font-weight:500"><input type="checkbox" name="fav" ${p.fav?'checked':''}> ${t('favorite')}</label>
+  ${foot()}</form>`);
+}
+async function savePattern(e,id){
+  e.preventDefault();const f=e.target;
+  const d={titulo:f.titulo.value.trim(),tecnica:f.tecnica.value,nivel:+f.nivel.value,categoria:f.categoria.value===''?'':+f.categoria.value,autor:f.autor.value,url:f.url.value,term:f.term.value,tags:f.tags.value,texto:f.texto.value,fav:f.fav.checked};
+  if(f.imagen.files[0])d.imagen=await readFile(f.imagen.files[0],true);
+  const a=f.archivo.files[0];if(a){if(a.size>15e6){toast(t('fileBig'));return}d.archivo=await readFile(a,false);d.archivoNombre=a.name}
+  let p;if(id){p=byId(S.patterns,id);Object.assign(p,d)}else{p={id:uid(),created:Date.now(),...d};S.patterns.push(p)}
+  save();closeModal();go('pattern',p.id);toast(t('patSaved'));
+}
+function viewPattern(){
+  const p=byId(S.patterns,V.id);if(!p)return viewPatterns();
+  const used=S.projects.filter(x=>x.patternId===p.id);
+  const c=hasCat(p)?CYC[p.categoria]:null;
+  return `<button class="btn ghost" onclick="go('patterns')">${t('backPat')}</button>
+  <div class="row between" style="margin:8px 0 18px"><div><h1>${p.fav?'⭐ ':''}${esc(p.titulo)}</h1>
+    <span class="tag">${tec(p.tecnica)}</span><span class="tag alt">${lvl(p.nivel)}</span>${c?`<span class="tag grey">${t('yarn')} ${t('cat')} ${c.cat} · ${catName(c.cat)}</span>`:''}${tagList(p.tags)}</div>
+    <div class="row"><button class="btn primary" onclick="projectFromPattern('${p.id}')">${t('startProj')}</button><button class="btn" onclick="editPattern('${p.id}')">${t('edit')}</button><button class="btn danger" onclick="delItem('patterns','${p.id}')">🗑️</button></div></div>
+  <div class="grid g2">
+    <div class="card"><h2>${t('pattern')}</h2>
+      ${p.term==='uk'?`<div class="warn">${t('ukWarn')}</div>`:p.term==='us'?`<div class="note">${t('usNote')}</div>`:''}
+      ${p.texto?`<div class="patterntext">${esc(p.texto)}</div>`:`<p class="muted">${t('noText')}</p>`}
+      <div class="row" style="margin-top:12px">${p.url?`<a class="btn" href="${esc(p.url)}" target="_blank" rel="noopener">${t('openLink')}</a>`:''}${p.archivo?`<button class="btn" onclick="openDataUrl(byId(S.patterns,'${p.id}').archivo)">${t('openFile')} ${esc(p.archivoNombre||t('file'))}</button>`:''}<button class="btn" onclick="window.print()">${t('print')}</button></div>
+    </div>
+    <div class="grid" style="align-content:start">
+      ${p.imagen?`<img class="hero-img" src="${p.imagen}" alt="">`:''}
+      <div class="card"><div class="kv"><b>${t('author')}</b><span>${esc(p.autor||'—')}</span><b>${t('level')}</b><span>${lvl(p.nivel)||'—'}: ${L().levelDesc[p.nivel]||''}</span>
+      ${c?`<b>${t('typTool')}</b><span>${fmtRange(p.tecnica==='crochet'?c.hook:c.needle)}</span>`:''}</div></div>
+      <div class="card"><h3>${t('projWith')}</h3>${used.length?used.map(x=>`<div class="step" onclick="go('project','${x.id}')">🧶 <span class="txt">${esc(x.name)}</span><span class="small muted">${est(x.estado)}</span></div>`).join(''):`<p class="muted small">${t('noneYet')}</p>`}</div>
+    </div>
+  </div>`;
+}
+function projectFromPattern(id){
+  const pt=byId(S.patterns,id);
+  editProject();
+  const f=$('#pf');f.name.value=pt.titulo;f.tecnica.value=pt.tecnica;formSuggest('tec');
+  if(hasCat(pt)){f.categoria.value=pt.categoria;formSuggest('cat')}
+  f.patternId.value=pt.id;
+}
+
+/* =====================================================================
+   TUTORIALES
+   ===================================================================== */
+function parseVideo(url){
+  url=(url||'').trim();let m;
+  if((m=url.match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/|v\/)|youtu\.be\/)([\w-]{11})/)))return {provider:'youtube',vid:m[1]};
+  if((m=url.match(/vimeo\.com\/(?:.*\/)?(?:video\/)?(\d{6,})/)))return {provider:'vimeo',vid:m[1]};
+  if(/\.(mp4|webm|ogg|mov)(\?|#|$)/i.test(url))return {provider:'file',vid:url};
+  return {provider:'link',vid:''};
+}
+function thumbOf(tu){return tu.provider==='youtube'?`https://i.ytimg.com/vi/${tu.vid}/mqdefault.jpg`:''}
+function watchUrl(tu,sec=0){
+  if(tu.provider==='youtube')return `https://www.youtube.com/watch?v=${tu.vid}${sec?`&t=${Math.floor(sec)}s`:''}`;
+  if(tu.provider==='vimeo')return `https://vimeo.com/${tu.vid}${sec?`#t=${Math.floor(sec)}s`:''}`;
+  return tu.url;
+}
+function parseChapters(txt){
+  const out=[];
+  for(const line of (txt||'').split(/\r?\n/)){
+    const m=line.match(/(\d{1,2}:)?\d{1,2}:\d{2}/);if(!m)continue;
+    const texto=(line.slice(0,m.index)+' '+line.slice(m.index+m[0].length)).replace(/^[\s\-–—:|·.)\]]+|[\s\-–—:|·(\[]+$/g,'').trim();
+    out.push({id:uid(),t:parseTime(m[0]),texto:texto||t('defStep'),hecho:false});
+  }
+  return out.sort((a,b)=>a.t-b.t);
+}
+function viewTutorials(){
+  const f=filters.tutorials;
+  const list=S.tutorials.filter(tu=>(!f.q||(tu.titulo+' '+(tu.autor||'')+' '+(tu.tags||'')).toLowerCase().includes(f.q.toLowerCase()))&&(!f.tec||tu.tecnica===f.tec));
+  return `<div class="row between"><div><h1>${t('tutTitle')}</h1><p class="sub">${t('tutSub')}</p></div><button class="btn primary" onclick="editTutorial()">${t('newTut')}</button></div>
+  <div class="toolbar"><input type="search" placeholder="${t('search')}" value="${esc(f.q)}" oninput="filters.tutorials.q=this.value;rerenderList()">${tecFilter('tutorials')}</div>
+  ${list.length?`<div class="grid g3">${list.map(tu=>`<div class="card click" onclick="go('tutorial','${tu.id}')">
+    <div class="thumb">${thumbOf(tu)?`<img src="${thumbOf(tu)}" alt="" loading="lazy">`:'🎬'}</div>
+    <b>${esc(tu.titulo)}</b><div class="small muted">${esc(tu.autor||'')}</div>
+    <div style="margin:6px 0"><span class="tag">${tec(tu.tecnica)}</span><span class="tag alt">${lvl(tu.nivel)}</span><span class="tag grey">${tu.pasos.length} ${t('steps')}</span></div>
+    <div class="row"><div class="bar" style="flex:1"><i style="width:${pct(tu)}%"></i></div><span class="small">${pct(tu)}%</span></div></div>`).join('')}</div>`:
+  `<div class="empty">${S.tutorials.length?t('noMatchTut'):t('noTut')}</div>`}`;
+}
+function editTutorial(id){
+  const tu=id?byId(S.tutorials,id):{tecnica:'crochet',nivel:1};
+  openModal(`<h2>${id?t('editTutT'):t('newTutT')}</h2><form id="tf" onsubmit="saveTutorial(event,'${id||''}')">
+  <div class="field"><label>${t('videoLink')}</label>
+    <div class="row"><input type="url" name="url" required value="${esc(tu.url||'')}" placeholder="https://www.youtube.com/watch?v=…" style="flex:1"><button type="button" class="btn" onclick="autofillTut()">${t('autofill')}</button></div>
+    <span class="small muted" id="tfmsg"></span></div>
+  <div class="fgrid"><div class="field"><label>${t('title')}</label><input type="text" name="titulo" required value="${esc(tu.titulo||'')}"></div>
+  <div class="field"><label>${t('channel')}</label><input type="text" name="autor" value="${esc(tu.autor||'')}"></div></div>
+  <div class="fgrid"><div class="field"><label>${t('technique')}</label>${tecSelect('tecnica',tu.tecnica,false)}</div>
+  <div class="field"><label>${t('level')}</label><select name="nivel">${optList(L().levels,tu.nivel)}</select></div>
+  <div class="field"><label>${t('tagsLbl')}</label><input type="text" name="tags" value="${esc(tu.tags||'')}" placeholder="${t('tutTagsPh')}"></div></div>
+  <div class="field"><label>${id?t('moreSteps'):t('stepsLbl')}</label>
+    <textarea name="caps" placeholder="${t('capsPh')}"></textarea>
+    <span class="small muted">${t('capsHint')}</span></div>
+  <div class="field"><label>${t('notes')}</label><textarea name="notas">${esc(tu.notas||'')}</textarea></div>
+  ${foot()}</form>`);
+}
+async function autofillTut(){
+  const f=$('#tf'),msg=$('#tfmsg');const url=f.url.value.trim();if(!url)return;
+  const v=parseVideo(url);
+  msg.textContent=v.provider==='link'?t('notEmb'):t('fetching');
+  if(v.provider==='link'||v.provider==='file')return;
+  try{const r=await fetch('https://noembed.com/embed?url='+encodeURIComponent(url));const j=await r.json();
+    if(j.title){f.titulo.value=j.title;f.autor.value=j.author_name||'';msg.textContent=t('found')}else msg.textContent=t('notFound')}
+  catch(e){msg.textContent=t('noService')}
+}
+function saveTutorial(e,id){
+  e.preventDefault();const f=e.target;const v=parseVideo(f.url.value);
+  const d={url:f.url.value.trim(),titulo:f.titulo.value.trim(),autor:f.autor.value,tecnica:f.tecnica.value,nivel:+f.nivel.value,tags:f.tags.value,notas:f.notas.value,provider:v.provider,vid:v.vid};
+  const nuevos=parseChapters(f.caps.value);
+  let tu;if(id){tu=byId(S.tutorials,id);Object.assign(tu,d);tu.pasos=[...tu.pasos,...nuevos].sort((a,b)=>a.t-b.t)}
+  else{tu={id:uid(),created:Date.now(),pasos:nuevos,...d};S.tutorials.push(tu)}
+  save();closeModal();go('tutorial',tu.id);toast(nuevos.length?t('stepsAdded',{n:nuevos.length}):t('tutSaved'));
+}
+let curStep=null;
+function viewTutorial(){
+  const tu=byId(S.tutorials,V.id);if(!tu)return viewTutorials();
+  const done=tu.pasos.filter(x=>x.hecho).length;
+  const used=S.projects.filter(p=>p.tutorialId===tu.id);
+  return `<button class="btn ghost" onclick="go('tutorials')">${t('backTut')}</button>
+  <div class="row between" style="margin:8px 0 18px"><div><h1>${esc(tu.titulo)}</h1><span class="small muted">${esc(tu.autor||'')}</span>
+    <div><span class="tag">${tec(tu.tecnica)}</span><span class="tag alt">${lvl(tu.nivel)}</span>${tagList(tu.tags)}</div></div>
+    <div class="row"><a class="btn" href="${esc(watchUrl(tu))}" target="_blank" rel="noopener">${t('openOrig')}</a><button class="btn" onclick="editTutorial('${tu.id}')">${t('edit')}</button><button class="btn danger" onclick="delItem('tutorials','${tu.id}')">🗑️</button></div></div>
+  <div class="grid" style="grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr);align-items:start" id="tutgrid">
+    <div>
+      <div class="video" id="player"></div>
+      <p class="small muted">${t('videoHint')}</p>
+      ${tu.notas?`<div class="card"><h3>${t('notes')}</h3><div style="white-space:pre-wrap">${esc(tu.notas)}</div></div>`:''}
+      ${used.length?`<div class="card" style="margin-top:12px"><h3>${t('usedIn')}</h3>${used.map(p=>`<div class="step" onclick="go('project','${p.id}')">🧶 <span class="txt">${esc(p.name)}</span></div>`).join('')}</div>`:''}
+    </div>
+    <div class="card">
+      <div class="row between"><h2>${t('stepsT')}</h2><span class="small muted">${done}/${tu.pasos.length}</span></div>
+      <div class="bar" style="margin-bottom:10px"><i style="width:${pct(tu)}%"></i></div>
+      ${tu.pasos.map((s,i)=>`<div class="step ${s.hecho?'done':''} ${curStep===s.id?'cur':''}" onclick="seek('${tu.id}','${s.id}')">
+        <input type="checkbox" ${s.hecho?'checked':''} onclick="event.stopPropagation();toggleStep('${tu.id}','${s.id}')" style="accent-color:var(--accent)">
+        <span class="t">${fmtTime(s.t)}</span><span class="txt" style="flex:1">${i+1}. ${esc(s.texto)}</span>
+        ${tu.provider!=='file'?`<a href="${esc(watchUrl(tu,s.t))}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${t('openAt')}">↗</a>`:''}
+        <button class="btn sm ghost" onclick="event.stopPropagation();delStep('${tu.id}','${s.id}')" title="${t('remove')}">✕</button></div>`).join('')||`<p class="muted small">${t('noSteps')}</p>`}
+      <form onsubmit="addStep(event,'${tu.id}')" style="margin-top:12px;border-top:1px solid var(--border);padding-top:12px">
+        <div class="row"><input type="text" name="tm" placeholder="mm:ss" style="width:84px">${tu.provider==='file'?`<button type="button" class="btn sm" onclick="this.form.tm.value=fmtTime(document.querySelector('#player video').currentTime)">${t('now')}</button>`:''}
+        <input type="text" name="tx" placeholder="${t('stepPh')}" style="flex:1;min-width:140px"><button class="btn primary sm">${t('add')}</button></div>
+      </form>
+      ${tu.pasos.some(x=>x.hecho)?`<button class="btn sm ghost" style="margin-top:8px" onclick="resetSteps('${tu.id}')">${t('uncheckAll')}</button>`:''}
+    </div>
+  </div>`;
+}
+function playerHTML(tu,sec=0,auto=false){
+  if(tu.provider==='youtube')return `<iframe src="https://www.youtube-nocookie.com/embed/${tu.vid}?rel=0&modestbranding=1&hl=${curLang()}${sec?`&start=${Math.floor(sec)}`:''}${auto?'&autoplay=1':''}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" title="Video"></iframe>`;
+  if(tu.provider==='vimeo')return `<iframe src="https://player.vimeo.com/video/${tu.vid}?${auto?'autoplay=1':''}${sec?`#t=${Math.floor(sec)}s`:''}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Video"></iframe>`;
+  if(tu.provider==='file')return `<video controls src="${esc(tu.url)}"></video>`;
+  return `<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;gap:12px;padding:20px;text-align:center">${t('cantEmb')}<a class="btn primary" href="${esc(tu.url)}" target="_blank" rel="noopener">${t('openVideo')}</a></div>`;
+}
+function mountPlayer(){const tu=byId(S.tutorials,V.id);if(!tu)return;$('#player').innerHTML=playerHTML(tu);
+  if(innerWidth<900){const g=$('#tutgrid');if(g)g.style.gridTemplateColumns='1fr'}}
+function seek(tid,sid){
+  const tu=byId(S.tutorials,tid),s=byId(tu.pasos,sid);curStep=sid;
+  if(tu.provider==='file'){const v=$('#player video');if(v){v.currentTime=s.t;v.play()}}
+  else $('#player').innerHTML=playerHTML(tu,s.t,true);
+  document.querySelectorAll('.step.cur').forEach(x=>x.classList.remove('cur'));
+  const el=document.querySelectorAll('#tutgrid .card .step')[tu.pasos.indexOf(s)];if(el)el.classList.add('cur');
+  $('#player').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function toggleStep(tid,sid){const s=byId(byId(S.tutorials,tid).pasos,sid);s.hecho=!s.hecho;save();keepPlayer()}
+function delStep(tid,sid){const tu=byId(S.tutorials,tid);tu.pasos=tu.pasos.filter(x=>x.id!==sid);save();keepPlayer()}
+function addStep(e,tid){e.preventDefault();const f=e.target,tu=byId(S.tutorials,tid);const tx=f.tx.value.trim();if(!tx)return;
+  tu.pasos.push({id:uid(),t:parseTime(f.tm.value),texto:tx,hecho:false});tu.pasos.sort((a,b)=>a.t-b.t);save();keepPlayer();setTimeout(()=>{const i=document.querySelector('#tutgrid form input[name=tm]');if(i)i.focus()},0)}
+function resetSteps(tid){byId(S.tutorials,tid).pasos.forEach(s=>s.hecho=false);save();keepPlayer()}
+function keepPlayer(){const pl=$('#player');const node=pl&&pl.firstElementChild;render();if(node){$('#player').innerHTML='';$('#player').appendChild(node)}}
+
+/* =====================================================================
+   GUÍA
+   ===================================================================== */
+function viewGuide(){
+  const tab=V.tab||'grosor',TB=t('tabs'),en=curLang()==='en';
+  let body='';
+  if(tab==='grosor')body=`<h2>${t('gwTitle')}</h2><p class="muted">${t('gwSub')}</p>
+    <div class="tablewrap"><table><tr><th>${t('thCat')}</th><th>${t('thName')}</th><th>${t('thTypes')}</th><th>${t('thPly')}</th><th>${t('thKnitG')}</th><th>${t('thNeedles')}</th><th>${t('thCrochG')}</th><th>${t('thHook')}</th></tr>
+    ${CYC.map(c=>`<tr><td><b style="font-size:18px">${c.cat}</b></td><td><b>${catName(c.cat)}</b>${en?'':`<br><span class="small muted">${c.en}</span>`}</td><td>${c.tipos}</td><td>${c.ply}</td><td>${gauge(c,'k')}</td><td>${fmtRange(c.needle)}</td><td>${gauge(c,'c')}</td><td>${c.cat===0?t('hookSteel'):fmtRange(c.hook)}</td></tr>`).join('')}</table></div>
+    <div class="note">${t('gwNote')}</div><p class="small muted">${t('gwPly')}</p>`;
+  if(tab==='ganchillos')body=`<h2>${t('hooksTitle')}</h2><p class="muted">${t('hooksSub')}</p>
+    <div class="grid g2"><div class="tablewrap"><table><tr><th>${t('thMm')}</th><th>${t('thUs')}</th></tr>${HOOKS.map(h=>`<tr><td>${mm(h[0])}</td><td>${h[1]||'—'}</td></tr>`).join('')}</table></div>
+    <div><h3>${t('steelTitle')}</h3><p class="small muted">${t('steelSub')}</p><div class="tablewrap"><table><tr><th>${t('thMm')}</th><th>${t('thUs')}</th></tr>${STEEL.map(h=>`<tr><td>${mm(h[0])}</td><td>${h[1]}</td></tr>`).join('')}</table></div></div></div>`;
+  if(tab==='agujas')body=`<h2>${t('needlesTitle')}</h2><p class="muted">${t('needlesSub')}</p>
+    <div class="tablewrap" style="max-width:420px"><table><tr><th>${t('thMm')}</th><th>${t('thUs')}</th></tr>${NEEDLES.map(h=>`<tr><td>${mm(h[0])}</td><td>${h[1]||'—'}</td></tr>`).join('')}</table></div>`;
+  if(tab==='abrevc'){const G=L().glossC;body=`<h2>${t('abbrCTitle')}</h2><div class="warn">${t('abbrWarn')}</div>
+    <div class="tablewrap"><table><tr>${en?'':`<th>${t('thLocal')}</th><th>${t('thAbbr')}</th>`}<th>${t('thUS')}</th><th>${t('thUK')}</th></tr>
+    ${GLOSS_C_EN.map((r,i)=>`<tr>${en?'':`<td>${G[i][0]}</td><td><b>${G[i][1]}</b></td>`}<td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</table></div><p class="small muted">${t('abbrNote')}</p>`}
+  if(tab==='abrevp'){const G=L().glossK;body=`<h2>${t('abbrKTitle')}</h2>
+    <div class="tablewrap"><table><tr>${en?'':`<th>${t('thLocal')}</th><th>${t('thAbbr')}</th>`}<th>${t('thEn')}</th></tr>
+    ${GLOSS_K_EN.map((r,i)=>`<tr>${en?'':`<td>${G[i][0]}</td><td><b>${G[i][1]}</b></td>`}<td>${r}</td></tr>`).join('')}</table></div><p class="small muted">${t('abbrNote')}</p>`}
+  if(tab==='niveles')body=`<h2>${t('levelsTitle')}</h2><p class="muted">${t('levelsSub')}</p>
+    <div class="grid g2">${Object.entries(L().levels).map(([k,v])=>`<div class="card"><h3>${'●'.repeat(k)}${'○'.repeat(4-k)} ${v}</h3><p style="margin:0">${L().levelDesc[k]}</p></div>`).join('')}</div>`;
+  if(tab==='empezar')body=`<h2>${t('startTitle')}</h2><div class="grid g2">${t('startCards').map(c=>`<div class="card">${c}</div>`).join('')}</div>`;
+  return `<h1>${t('guideTitle')}</h1><p class="sub">${t('guideSub')}</p>
+  <div class="tabs">${Object.entries(TB).map(([k,l])=>`<button class="${tab===k?'active':''}" onclick="go('guide',null,'${k}')">${l}</button>`).join('')}</div>
+  <div class="card">${body}</div>
+  <p class="small muted" style="margin-top:14px">${t('guideSrc',{link:'<a href="https://www.yarnstandards.com" target="_blank" rel="noopener">www.YarnStandards.com</a>'})}</p>`;
+}
+
+/* =====================================================================
+   AJUSTES
+   ===================================================================== */
+function viewSettings(){
+  const st=S.settings,size=new Blob([JSON.stringify(S)]).size,CN=t('colors'),PN=t('presetNames'),FN=t('fontNames');
+  return `<h1>${t('setTitle')}</h1><p class="sub">${t('setSub')}</p>
+  <div class="grid g2">
+    <div class="card"><h2>${t('appearance')}</h2>
+      <div class="field"><label>🌐 ${t('language')}</label><select onchange="setLang(this.value)">${Object.entries(LANGS).map(([k,v])=>`<option value="${k}" ${curLang()===k?'selected':''}>${v}</option>`).join('')}</select></div>
+      <label>${t('presets')}</label>
+      <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:16px">
+      ${Object.entries(PRESETS).map(([k,p])=>`<div class="card preset ${st.preset===k?'active':''}" style="padding:10px;background:${p.bg};color:${p.text}" onclick="setPreset('${k}')"><div class="swatch">${['primary','accent','surface','text'].map(c=>`<i style="background:${p[c]}"></i>`).join('')}</div><div class="small" style="margin-top:6px;font-weight:600">${PN[k]}</div></div>`).join('')}
+      </div>
+      <label>${t('customColors')}</label>
+      ${['bg','surface','text','primary','accent'].map(k=>`<div class="color-row"><input type="color" value="${st.theme[k]}" oninput="setColor('${k}',this.value)"><span>${CN[k]}</span></div>`).join('')}
+      <div class="fgrid" style="margin-top:12px">
+        <div class="field"><label>${t('font')}</label><select onchange="S.settings.font=this.value;applyTheme();save()">${Object.keys(FONTS).map(k=>`<option value="${k}" ${st.font===k?'selected':''}>${FN[k]}</option>`).join('')}</select></div>
+        <div class="field"><label>${t('corners')}: <span id="rv">${st.radius}</span> px</label><input type="range" min="0" max="26" value="${st.radius}" style="width:100%;accent-color:var(--primary)" oninput="S.settings.radius=+this.value;$('#rv').textContent=this.value;applyTheme();save()"></div>
+      </div>
+      <div class="fgrid">
+        <div class="field"><label>${t('appName')}</label><input type="text" value="${esc(appName())}" oninput="S.settings.name=this.value;applyTheme();save()"></div>
+        <div class="field"><label>${t('icon')}</label><input type="text" maxlength="4" value="${esc(st.logo)}" oninput="S.settings.logo=this.value||'🧶';applyTheme();save()"></div>
+      </div>
+    </div>
+    <div class="grid" style="align-content:start">
+      <div class="card"><h2>${t('expNotion')}</h2>
+        <p class="small">${t('expIntro')}</p>
+        <div class="row"><button class="btn" onclick="exportCSV('projects')">${t('csvProj')}</button><button class="btn" onclick="exportCSV('patterns')">${t('csvPat')}</button><button class="btn" onclick="exportCSV('tutorials')">${t('csvTut')}</button></div>
+        <div class="row" style="margin-top:8px"><button class="btn" onclick="exportMD()">${t('mdAll')}</button></div>
+        <div class="note">${t('notionHow')}</div>
+        <p class="small muted" style="margin-bottom:0">${t('notionNoFiles')}</p>
+      </div>
+      <div class="card"><h2>${t('backupT')}</h2>
+        <p class="small">${t('backupTxt',{mb:num((size/1024/1024).toFixed(2))})}</p>
+        <div class="row"><button class="btn primary" onclick="backup()">${t('dlBackup')}</button><label class="btn" style="margin:0;color:var(--text);font-size:15px">${t('restore')}<input type="file" accept=".json" hidden onchange="restore(this.files[0])"></label></div>
+        <hr style="border:0;border-top:1px solid var(--border);margin:16px 0">
+        <div class="row"><button class="btn" onclick="loadDemo()">${t('loadDemo')}</button><button class="btn danger" onclick="wipe()">${t('wipe')}</button></div>
+      </div>
+    </div>
+  </div>`;
+}
+function setPreset(k){S.settings.preset=k;S.settings.theme={...PRESETS[k]};applyTheme();save();render()}
+function setColor(k,v){S.settings.theme[k]=v;S.settings.preset='';applyTheme();save()}
+function csvCell(v){v=v==null?'':String(v);return /[",\n;]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}
+const plain=s=>String(s).replace(/^\S+\s/,'');
+function exportCSV(col){
+  let rows;
+  if(col==='projects')rows=[t('csvP'),...S.projects.map(p=>{const s=suggest(p);return [p.name,tec(p.tecnica),tipoTxt(p.tipo).l,plain(est(p.estado)),p.progreso||0,p.vueltas||0,`${p.categoria} - ${catName(p.categoria)}`,p.fibra,p.aguja,`${s.metros[0]}-${s.metros[1]}`,
+      (p.lanas||[]).map(l=>`${l.marca} ${l.color||''} x${l.ovillos||'?'}`).join(' | '),(p.materiales||[]).map(m=>(m.hecho?'[x] ':'[ ] ')+m.texto).join(' | '),(byId(S.patterns,p.patternId)||{}).titulo||'',(byId(S.tutorials,p.tutorialId)||{}).titulo||'',p.para||'',p.inicio||'',p.fin||'',p.notas||'']})];
+  if(col==='patterns')rows=[t('csvPa'),...S.patterns.map(p=>[p.titulo,tec(p.tecnica),lvl(p.nivel),hasCat(p)?`${p.categoria} - ${catName(p.categoria)}`:'',p.autor||'',p.url||'',t('term')[p.term]||'',p.tags||'',p.fav?t('yes'):t('no'),p.texto||''])];
+  if(col==='tutorials')rows=[t('csvT'),...S.tutorials.map(tu=>[tu.titulo,tu.url,tu.autor||'',tec(tu.tecnica),lvl(tu.nivel),tu.tags||'',tu.pasos.map(s=>`${fmtTime(s.t)} ${s.texto}`).join(' | '),pct(tu),tu.notas||''])];
+  const name=t('files')[col];
+  download(`${name}.csv`,'﻿'+rows.map(r=>r.map(csvCell).join(',')).join('\n'),'text/csv;charset=utf-8');toast(t('downloaded',{f:name+'.csv'}));
+}
+function projectMd(p){
+  const s=suggest(p),c=CYC[p.categoria];
+  return `## ${p.name}\n\n- **${t('technique')}:** ${tec(p.tecnica)} · **${t('mdType')}:** ${tipoTxt(p.tipo).l} · **${t('status')}:** ${est(p.estado)}\n- **${t('progress')}:** ${p.progreso||0}% · ${t('row')} ${p.vueltas||0}\n- **${t('yarn')}:** ${t('category')} ${c.cat} (${catName(c.cat)} · ${c.tipos}) — ${p.fibra}\n- **${p.tecnica==='crochet'?t('hook'):t('needles')}:** ${sizeLabel(p.aguja,p.tecnica)}\n- **${t('estYarn')}:** ${s.metros[0]}–${s.metros[1]} m\n${p.para?`- **${t('mdFor')}:** ${p.para}\n`:''}${p.inicio?`- **${t('mdDates')}:** ${p.inicio}${p.fin?' → '+p.fin:''}\n`:''}\n### ${plain(t('materials'))}\n${(p.materiales||[]).map(m=>`- [${m.hecho?'x':' '}] ${m.texto}`).join('\n')}\n${(p.lanas||[]).length?`\n### ${t('mdYarns')}\n${p.lanas.map(l=>`- ${l.marca}${l.comp?' ('+l.comp+')':''} — ${l.color||''}${l.lote?' · '+t('mdLot')+' '+l.lote:''} · ${t('mdSkeins',{n:l.ovillos||'?',m:l.metros||'?'})}`).join('\n')}\n`:''}${p.notas?`\n### ${t('notes')}\n${p.notas}\n`:''}`;
+}
+function copyProjectMd(id){const md=projectMd(byId(S.projects,id));(navigator.clipboard?navigator.clipboard.writeText(md):Promise.reject()).then(()=>toast(t('copiedNotion'))).catch(()=>{download('project.md',md,'text/markdown');toast(t('dlMd'))})}
+function exportMD(){
+  const F=t('files');
+  let md=`# ${appName()}\n\n_${t('mdExported')} ${today()}_\n\n# ${F.projects}\n\n${S.projects.map(projectMd).join('\n')}\n\n# ${F.patterns}\n\n`;
+  md+=S.patterns.map(p=>`## ${p.titulo}\n\n- ${tec(p.tecnica)} · ${lvl(p.nivel)}${p.autor?' · '+p.autor:''}\n${p.url?`- [${t('mdLink')}](${p.url})\n`:''}\n${p.texto?'```\n'+p.texto+'\n```\n':''}`).join('\n');
+  md+=`\n# ${F.tutorials}\n\n`+S.tutorials.map(tu=>`## ${tu.titulo}\n\n[${t('mdWatch')}](${tu.url})\n\n${tu.pasos.map(s=>`- [${s.hecho?'x':' '}] [${fmtTime(s.t)}](${watchUrl(tu,s.t)}) ${s.texto}`).join('\n')}\n`).join('\n');
+  download(`${appName().replace(/\s+/g,'-')}.md`,md,'text/markdown;charset=utf-8');toast(t('mdDl'));
+}
+function backup(){download(`yarn-backup-${today()}.json`,JSON.stringify(S),'application/json');toast(t('backupDl'))}
+function restore(file){if(!file)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d.projects||!d.patterns||!d.tutorials)throw 0;
+  if(!confirm(t('restoreConfirm')))return;
+  const lang=S.settings.lang;S={...blankState(),...d,settings:{...DEFAULT_SETTINGS(),lang,...(d.settings||{})}};save();applyTheme();render();toast(t('restored'))}catch(e){toast(t('badBackup'))}};r.readAsText(file)}
+function wipe(){if(!confirm(t('wipe1')))return;if(!confirm(t('wipe2')))return;const st=S.settings;S=blankState();S.settings=st;save();go('dash');toast(t('wiped'))}
+function loadDemo(){
+  const D=t('demo');
+  const pat={id:uid(),created:Date.now(),titulo:D.patTitle,tecnica:'crochet',nivel:1,categoria:3,autor:D.author,url:'',term:curLang()==='en'?'us':curLang(),tags:D.patTags,fav:true,texto:D.patText};
+  const tut={id:uid(),created:Date.now(),titulo:D.tutTitle,url:'https://www.youtube.com/results?search_query='+encodeURIComponent(D.tutQuery),provider:'link',vid:'',autor:'',tecnica:'crochet',nivel:1,tags:D.tutTags,notes:'',notas:D.tutNotes,
+    pasos:D.steps.map((x,i)=>({id:uid(),t:[0,30,90,150][i],texto:x,hecho:false}))};
+  const pr={id:uid(),created:Date.now(),name:D.projName,tecnica:'crochet',tipo:'amigurumi',estado:'curso',categoria:3,progreso:30,vueltas:4,inicio:today(),patternId:pat.id,tutorialId:tut.id,lanas:[],notas:D.projNotes};
+  const s=suggest(pr);pr.aguja=s.aguja;pr.fibra=s.fibra;pr.materiales=genMateriales(pr);
+  S.patterns.push(pat);S.tutorials.push(tut);S.projects.push(pr);save();go('dash');toast(t('demoAdded'));
+}
+
+/* =====================================================================
+   ARRANQUE
+   ===================================================================== */
+(async()=>{
+  await Store.open();
+  const d=await Store.get();
+  S=d?{...blankState(),...d,settings:{...DEFAULT_SETTINGS(),...(d.settings||{})}}:blankState();
+  if(d&&!d.settings.lang)S.settings.lang='es';
+  applyTheme();render();
+})();
+
+</script>
+</body>
+</html>
